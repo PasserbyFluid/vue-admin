@@ -28,14 +28,17 @@ const actions = {
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), passwd: password }).then(response => {
         console.log(response)
+        if (response.code == 1) {
+          commit('SET_TOKEN', response.msg.id)
+          setToken(response.msg.id)
+          setPower(response.msg.power)
+          setName(response.msg.name)
+          commit('SET_NAME', response.msg.name)
+          commit('SET_AVATAR', 'avatar')
+          
+        }
         // const { data } = response
-        commit('SET_TOKEN', response.msg.id)
-        setToken(response.msg.id)
-        setPower(response.msg.power)
-        setName(response.msg.name)
-        commit('SET_NAME', response.msg.name)
-        commit('SET_AVATAR', 'avatar')
-        resolve()
+        resolve(response)
       }).catch(error => {
         reject(error)
       })

@@ -35,7 +35,6 @@
     },
     mounted(){
         this.api = process.env.VUE_APP_BASE_API
-        this.getImageList() 
     },
 	methods: {
         onSubmit() {
@@ -60,6 +59,9 @@
     <style scoped>
     .imagename{
         padding: 10px 0
+    }
+    .box-card1{
+        /* margin-top: 20px; */
     }
 	.line {
 	    text-align: center;

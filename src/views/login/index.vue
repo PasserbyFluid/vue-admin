@@ -108,9 +108,13 @@
 		this.$refs.loginForm.validate(valid => {
 			if (valid) {
 			this.loading = true
-			this.$store.dispatch('user/login', this.loginForm).then(() => {
-				this.$router.push({ path:  '/list' })
-				this.loading = false
+			this.$store.dispatch('user/login', this.loginForm).then((res) => {
+				if (res.code ==1) {
+					this.$router.push({ path:  '/list' })
+					this.loading = false
+				}else{
+					this.$message(res.msg)
+				}
 			}).catch(() => {
 				this.loading = false
 			})

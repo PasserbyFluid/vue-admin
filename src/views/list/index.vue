@@ -745,6 +745,9 @@ export default {
 			wuliucode:'',
 			beizhu:'',
 			isenable:1,
+			isfahuo:'',
+			isshendan:'',
+			isduizhang:'',
 			beizhu1:'',
 			uid:getToken()
 		},
