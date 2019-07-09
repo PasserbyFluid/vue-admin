@@ -20,6 +20,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { getToken,getPower } from '@/utils/auth'
 import Logo from './Logo'
 import SidebarItem from './SidebarItem'
 import variables from '@/styles/variables.scss'
@@ -31,6 +32,14 @@ export default {
       'sidebar'
     ]),
     routes() {
+      if (getPower() !== '0') {
+        for (let i = 0; i < this.$router.options.routes.length; i++) {
+          if (this.$router.options.routes[i].roles =='0') {
+            this.$router.options.routes.splice(i,1)
+          }
+        }
+        return this.$router.options.routes
+      }
       return this.$router.options.routes
     },
     activeMenu() {

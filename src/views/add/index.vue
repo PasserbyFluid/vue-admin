@@ -99,7 +99,7 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="余款">
-						<el-input v-model="form.shengmoney"/>
+						<el-input disabled v-model="form.shengmoney" :value='yukuanFun'/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
@@ -155,7 +155,7 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="卡款出">
-						<el-input v-model="form.kakuan"/>
+						<el-input disabled v-model="form.kakuan" :value='kakuanFun'/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
@@ -165,7 +165,7 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="利润">
-						<el-input v-model="form.lirun"/>
+						<el-input disabled v-model="form.lirun" :value='lirunFun'/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
@@ -214,7 +214,7 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="纯利">
-						<el-input v-model="form.chunli"/>
+						<el-input disabled v-model="form.chunli" :value='chunliFun'/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
@@ -411,14 +411,29 @@
 			}else if(this.form.fapiao == '专用发票13%'){
 				rate = 0.10;
 			}
-			return this.form.shuie = (this.form.price * this.form.count * rate).toFixed(2);
+			return this.form.shuie = (Number(this.form.realshoumoney) * Number(rate)).toFixed(2);
 		},
 		shoumoneyFun:function(){
 			return this.form.shoumoney = this.form.price * this.form.count + Number(this.form.banfei) + Number(this.form.jiaji);
 		},
+		// zhichuFun:function(){
+		// 	return this.form.zhichu = (Number(this.form.realshoumoney) - Number(this.form.kakuan)-Number(this.form.shuakaqi) - Number(this.form.system) -Number(this.form.youfei) -Number(this.form.label)-Number(this.form.shuie)-Number(this.form.tuikuan)-Number(this.form.jiekuan)).toFixed(2);
+		// },
 		zhichuFun:function(){
-			return this.form.zhichu = (Number(this.form.realshoumoney) - Number(this.form.kakuan)-Number(this.form.shuakaqi) - Number(this.form.system) -Number(this.form.youfei) -Number(this.form.label)-Number(this.form.shuie)-Number(this.form.tuikuan)-Number(this.form.jiekuan)).toFixed(2);
-		}
+			return this.form.zhichu = ( Number(this.form.kakuan)+Number(this.form.shuakaqi) + Number(this.form.system) +Number(this.form.youfei)+Number(this.form.label)+Number(this.form.shuie)+Number(this.form.tuikuan)).toFixed(2);
+		},
+		yukuanFun:function(){
+			return this.form.shengmoney = this.form.realshoumoney -this.form.dingmoney
+		},
+		kakuanFun:function(){
+			return this.form.kakuan = this.form.shoumoney
+		},
+		lirunFun:function(){
+			return this.form.lirun = this.form.realshoumoney -this.form.kakuan
+		},
+		chunliFun:function(){
+			return this.form.chunli = this.form.realshoumoney -this.form.zhichu
+		},
 	},
 	methods: {
 		onSubmit() {

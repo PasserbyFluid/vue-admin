@@ -42,14 +42,14 @@
 		</el-form-item>
 
 			<el-button :loading="loading" type="primary" style="width:100%;float:right;margin-bottom:15px;" @click.native.prevent="handleLogin">登录</el-button>
-			<p class="toAnother" @click="toReg">去注册</p>
+			<!-- <p class="toAnother" @click="toReg">去注册</p> -->
 		</el-form>
 	</div>
 	</template>
 
 	<script>
 	import { validUsername } from '@/utils/validate'
-
+	import {roleRoute} from '@/router'
 	export default {
 	name: 'Login',
 	data() {
@@ -112,6 +112,8 @@
 				if (res.code ==1) {
 					this.$router.push({ path:  '/list' })
 					this.loading = false
+					// this.$router.options.routes.unshift(roleRoute[0]);
+					console.log(this.$router)
 				}else{
 					this.$message(res.msg)
 				}

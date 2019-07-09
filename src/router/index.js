@@ -36,11 +36,11 @@
 		component: () => import('@/views/login/index'),
 		hidden: true
 	},
-	{
-		path: '/reg',
-		component: () => import('@/views/reg/index'),
-		hidden: true
-	},
+	// {
+	// 	path: '/reg',
+	// 	component: () => import('@/views/reg/index'),
+	// 	hidden: true
+	// },
 	{
 		path: '/404',
 		component: () => import('@/views/404'),
@@ -63,6 +63,7 @@
 		component: Layout,
 		redirect: '/list',
 		name: 'todolist',
+		roles:'01',
 		// meta: { title: '待办事项', icon: 'example' },
 		children: [
 		{
@@ -73,54 +74,24 @@
 		}
 		]
 	},
-	// {
-	// 	path: '/image',
-	// 	component: Layout,
-	// 	redirect: '/image',
-	// 	children: [{
-	// 		path: 'image',
-	// 		name: 'image',
-	// 		component: () => import('@/views/image/index'),
-	// 		meta: { title: '上传确认稿', icon: 'dashboard' }
-	// 	}]
-	// },
-	// {
-	// 	path: '/permission',
-	// 	component: Layout,
-	// 	redirect: '/permission/page',
-	// 	alwaysShow: true, // will always show the root menu
-	// 	name: 'Permission',
-	// 	meta: {
-	// 	title: '权限管理',
-	// 	icon: 'dashboard',
-	// 	roles: ['0'] // you can set roles in root nav
-	// 	},
-	// 	children: [
-	// 	{
-	// 		path: 'page',
-	// 		component: () => import('@/views/permission/page'),
-	// 		name: 'PagePermission',
-	// 		meta: {
-	// 		title: '权限管理',
-	// 		roles: ['0'] // or you can only set roles in sub nav
-	// 		}
-	// 	},
-	// 	{
-	// 		path: 'role',
-	// 		component: () => import('@/views/permission/role'),
-	// 		name: 'RolePermission',
-	// 		meta: {
-	// 		title: '角色管理',
-	// 		roles: ['0']
-	// 		}
-	// 	}
-	// 	]
-	// },
+	{
+		path: '/image',
+		component: Layout,
+		redirect: '/image',
+		roles:'0',
+		children: [{
+			path: 'image',
+			name: 'image',
+			component: () => import('@/views/image/index'),
+			meta: { title: '管理设置', icon: 'dashboard' }
+		}]
+	},
 	{
 		path: '/customer',
 		component: Layout,
 		redirect: '/customer/list',
 		name: 'customer',
+		roles:'01',
 		meta: { title: '客户', icon: 'example' },
 		children: [
 		
@@ -145,29 +116,13 @@
 		]
 	},
 	{
-		path: '/image',
-		component: Layout,
-		redirect: '/image',
-		children: [{
-		path: 'image',
-		name: 'image',
-		component: () => import('@/views/image/index'),
-		meta: { title: '用户管理', icon: 'dashboard' }
-		}]
-	},
-	{
 		path: '/financial',
 		component: Layout,
+		roles:'01',
 		redirect: '/financial/manager',
 		name: 'financial',
 		meta: { title: '财务管理', icon: 'example' },
 		children: [
-			// {
-			// 	path: 'manager',
-			// 	name: 'manager',
-			// 	component: () => import('@/views/financial/manager'),
-			// 	meta: { title: '财务管理', icon: 'table' }
-			// },
 			{
 				path: 'income',
 				name: 'income',
@@ -180,25 +135,24 @@
 				component: () => import('@/views/financial/pay'),
 				meta: { title: '增加支出', icon: 'table' }
 			},
-			// {
-			// 	path: 'latestpay',
-			// 	name: 'latestpay',
-			// 	component: () => import('@/views/financial/latestpay'),
-			// 	meta: { title: '最近支出', icon: 'tree' }
-			// },
-			// {
-			// 	path: 'transfer',
-			// 	name: 'transfer',
-			// 	component: () => import('@/views/financial/transfer'),
-			// 	meta: { title: '内部转账', icon: 'tree' }
-			// }
 		]
 	},
 
-	// 404 page must be placed at the end !!!
 	{ path: '*', redirect: '/404', hidden: true }
 	]
-
+	// export const roleRoute = [
+	// 	{
+	// 	path: '/image',
+	// 	component: Layout,
+	// 	redirect: '/image',
+	// 	children: [{
+	// 	path: 'image',
+	// 	name: 'image',
+	// 	component: () => import('@/views/image/index'),
+	// 	meta: { title: '管理设置', icon: 'dashboard' }
+	// 	}]
+	// },
+	// ]
 	const createRouter = () => new Router({
 	// mode: 'history', // require service support
 	scrollBehavior: () => ({ y: 0 }),

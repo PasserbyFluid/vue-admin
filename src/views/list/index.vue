@@ -279,11 +279,11 @@
 			</el-table-column>
 			<el-table-column label="余款"  align="center">
 				<template slot-scope="scope">
-					<template v-if="scope.row.edit&&power=='0'">
+					<!-- <template v-if="scope.row.edit&&power=='0'">
 						<el-input v-model="scope.row.shengmoney" class="edit-input" size="small" />
 					</template>
-					<span v-else>{{ scope.row.shengmoney }}</span>
-				<!-- <span>{{ scope.row.shengmoney }}</span> -->
+					<span v-else>{{ scope.row.shengmoney }}</span> -->
+				<span>{{ scope.row.shengmoney }}</span>
 				</template>
 			</el-table-column>
 			<el-table-column label="付款方式"  align="center">
@@ -361,13 +361,13 @@
 				<!-- <span>{{ scope.row.jiaji1 }}</span> -->
 				</template>
 			</el-table-column>
-			<el-table-column label="卡款"  align="center">
+			<el-table-column label="卡款出"  align="center">
 				<template slot-scope="scope">
-					<template v-if="scope.row.edit&&power=='0'">
+					<!-- <template v-if="scope.row.edit&&power=='0'">
 						<el-input v-model="scope.row.kakuan" class="edit-input" size="small" />
 					</template>
-					<span v-else>{{ scope.row.kakuan }}</span>
-				<!-- <span>{{ scope.row.kakuan }}</span> -->
+					<span v-else>{{ scope.row.kakuan }}</span> -->
+				<span>{{ scope.row.kakuan }}</span>
 				</template>
 			</el-table-column>
 			<el-table-column label="供应商结款 "  align="center" width="100">
@@ -381,11 +381,11 @@
 			</el-table-column>
 			<el-table-column label="利润"  align="center">
 				<template slot-scope="scope">
-					<template v-if="scope.row.edit&&power=='0'">
+					<!-- <template v-if="scope.row.edit&&power=='0'">
 						<el-input v-model="scope.row.lirun" class="edit-input" size="small" />
 					</template>
-					<span v-else>{{ scope.row.lirun }}</span>
-				<!-- <span>{{ scope.row.lirun }}</span> -->
+					<span v-else>{{ scope.row.lirun }}</span> -->
+				<span>{{ scope.row.lirun }}</span>
 				</template>
 			</el-table-column>
 			<el-table-column label="刷卡器"  align="center">
@@ -458,16 +458,16 @@
 						<el-input v-model="scope.row.zhichu" class="edit-input" size="small" />
 					</template>
 					<span v-else>{{ scope.row.zhichu }}</span> -->
-				<span>{{ (Number(scope.row.realshoumoney) - Number(scope.row.kakuan)-Number(scope.row.shuakaqi) - Number(scope.row.system) -Number(scope.row.youfei) -Number(scope.row.label)-Number(scope.row.shuie)-Number(scope.row.tuikuan)-Number(scope.row.jiekuan)).toFixed(2) }}</span>
+				<span>{{ ( Number(scope.row.kakuan)+Number(scope.row.shuakaqi) + Number(scope.row.system) +Number(scope.row.youfei)+Number(scope.row.label)+Number(scope.row.shuie)+Number(scope.row.tuikuan)).toFixed(2) }}</span>
 				</template>
 			</el-table-column>
 			<el-table-column label="纯利"  align="center">
 				<template slot-scope="scope">
-					<template v-if="scope.row.edit&&power=='0'">
+					<!-- <template v-if="scope.row.edit&&power=='0'">
 						<el-input v-model="scope.row.chunli" class="edit-input" size="small" />
 					</template>
-					<span v-else>{{ scope.row.chunli }}</span>
-				<!-- <span>{{ scope.row.chunli }}</span> -->
+					<span v-else>{{ scope.row.chunli }}</span> -->
+				<span>{{ scope.row.chunli }}</span>
 				</template>
 			</el-table-column>
 			<el-table-column label="提点"  align="center">
