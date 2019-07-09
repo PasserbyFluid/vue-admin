@@ -1,8 +1,8 @@
 # 用户订单管理系统
 
-> 基于electron-vue-admin，后台采用PHP 
+> 基于vue-element-admin，后台采用PHP 
 
-项目模板采用[vueAdmin-template](https://github.com/PanJiaChen/vueAdmin-template) ,基于[electron-vue](https://github.com/SimulatedGREG/electron-vue) using [vue-cli](https://github.com/vuejs/vue-cli).文档戳这里 [here](https://simulatedgreg.gitbooks.io/electron-vue/content/index.html).
+项目模板采用[vueAdmin-template](https://github.com/PanJiaChen/vueAdmin-template) 
 
 ## 功能列表
 > 1.添加用户
