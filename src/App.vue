@@ -42,8 +42,6 @@
 		watch:{
 			'todolist':function(n, o){
 				window.clearInterval(this.timer)
-				// console.log(n)
-				// console.log('n------------')
 				for (let i = 0; i < n.length; i++) {
 					if (n[i].remind == '0') {
 						console.log(n[i])

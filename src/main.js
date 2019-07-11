@@ -15,20 +15,7 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission' // permission control
 
-/**
- * If you don't want to use mock-server
- * you want to use MockJs for mock api
- * you can execute: mockXHR()
- *
- * Currently MockJs will be used in the production environment,
- * please remove it before going online! ! !
- */
 import axios from '@/utils/request'
-// const service = axios.create({
-//   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
-//   // withCredentials: true, // send cookies when cross-domain requests
-//   timeout: 5000 // request timeout
-// })
 Vue.prototype.$http = axios;
 
 
@@ -55,12 +42,7 @@ Date.prototype.format = function(fmt) {
 }  
 
 
-// import { mockXHR } from '../mock'
-// if (process.env.NODE_ENV === 'production') {
-//   mockXHR()
-// }
 
-// set ElementUI lang to EN
 Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false
