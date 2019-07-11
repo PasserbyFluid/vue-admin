@@ -1,3 +1,6 @@
+---
+sidebar: auto
+---
 # 用户订单管理系统
 
 > 基于vue-element-admin，后台采用PHP 
