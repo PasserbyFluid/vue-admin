@@ -66,17 +66,17 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="单价">
+						<el-form-item label="收单价">
 						<el-input v-model="form.price"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="版费">
+						<el-form-item label="收版费">
 						<el-input v-model="form.banfei"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="加急费">
+						<el-form-item label="收加急费">
 						<el-input v-model="form.jiaji"/>
 						</el-form-item>
 					</el-col>
@@ -90,16 +90,6 @@
 					<el-col :span="6">
 						<el-form-item label="实际到账金额">
 						<el-input v-model="form.realshoumoney"/>
-						</el-form-item>
-					</el-col>
-					<el-col :span="6">
-						<el-form-item label="定金">
-						<el-input v-model="form.dingmoney"/>
-						</el-form-item>
-					</el-col>
-					<el-col :span="6">
-						<el-form-item label="余款">
-						<el-input disabled v-model="form.shengmoney" :value='yukuanFun'/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
@@ -123,6 +113,79 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
+						<el-form-item label="定金">
+						<el-input v-model="form.dingmoney"/>
+						</el-form-item>
+					</el-col>
+					<el-col :span="6">
+						<el-form-item label="定金付款方式">
+							<el-select v-model="form.paymentding" placeholder="定金付款方式">
+								<el-option v-for="item in paymentList" :key="item.key" :label="item.key" :value="item.value" />
+							</el-select>
+						<!-- <el-input v-model="form.payment"/> -->
+						</el-form-item>
+					</el-col>
+					<el-col :span="6">
+						<el-form-item label="定金拍款时间">
+							<el-date-picker
+								v-model="form.paytimeding"
+								align="right"
+								type="date"
+								placeholder="选择日期"
+								value-format="yyyy-MM-dd"
+								>
+							</el-date-picker>
+						</el-form-item>
+					</el-col>
+					<el-col :span="6">
+						<el-form-item label="余款">
+						<el-input disabled v-model="form.shengmoney" :value='yukuanFun'/>
+						</el-form-item>
+					</el-col>
+					<el-col :span="6" >
+						<el-form-item label="余款付款方式">
+							<template v-if="form.shengmoney > 0">
+								<el-select  v-model="form.paymentyu" placeholder="余款付款方式">
+									<el-option  v-for="item in paymentList" :key="item.key" :label="item.key" :value="item.value" />
+								</el-select>
+							</template>
+							<template v-else>
+								<el-select disabled v-model="form.paymentyu" placeholder="余款付款方式">
+									<el-option  v-for="item in paymentList" :key="item.key" :label="item.key" :value="item.value" />
+								</el-select>
+							</template>
+						<!-- <el-input v-model="form.payment"/> -->
+						</el-form-item>
+					</el-col>
+					<el-col :span="6">
+						<template v-if="form.shengmoney > 0">
+							<el-form-item label="余款拍款时间">
+							<el-date-picker
+								v-model="form.paytimeyu"
+								align="right"
+								type="date"
+								placeholder="选择日期"
+								value-format="yyyy-MM-dd"
+								>
+							</el-date-picker>
+						</el-form-item>
+						</template>
+						<template v-else>
+							<el-form-item label="余款拍款时间">
+							<el-date-picker
+								:disabled='true'
+								v-model="form.paytime"
+								align="right"
+								type="date"
+								placeholder="选择日期"
+								value-format="yyyy-MM-dd"
+								>
+							</el-date-picker>
+						</el-form-item>
+						</template>
+						
+					</el-col>
+					<el-col :span="6">
 						<el-form-item label="货期">
 						<el-input v-model="form.huoqi"/>
 						</el-form-item>
@@ -139,17 +202,17 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="单价">
+						<el-form-item label="出单价">
 						<el-input v-model="form.price1"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="版费">
+						<el-form-item label="出版费">
 						<el-input v-model="form.banfei1"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="加急费">
+						<el-form-item label="出加急费">
 						<el-input v-model="form.jiaji1"/>
 						</el-form-item>
 					</el-col>
@@ -304,7 +367,11 @@
 				shoubeizhu:'',
 				realshoumoney:'',
 				dingmoney: '',
+				paymentding:'',
+				paytimeding:'',
 				shengmoney: '',
+				paymentyu:'',
+				paytimeyu:'',
 				payment:'',
 				paytime:'',
 				huoqi:'',
@@ -426,7 +493,7 @@
 			return this.form.shengmoney = this.form.realshoumoney -this.form.dingmoney
 		},
 		kakuanFun:function(){
-			return this.form.kakuan = this.form.shoumoney
+			return this.form.kakuan = this.form.price1 * this.form.count + Number(this.form.banfei1) + Number(this.form.jiaji1);
 		},
 		lirunFun:function(){
 			return this.form.lirun = this.form.realshoumoney -this.form.kakuan

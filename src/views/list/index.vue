@@ -83,6 +83,17 @@
 				<el-input v-model="listQuery.wuliucode" placeholder="物流单号" style="width: 100px;" class="filter-item" />
 				<el-input v-model="listQuery.beizhu" placeholder="备注" style="width: 100px;" class="filter-item" />
 				<el-input v-model="listQuery.beizhu1" placeholder="备注1" style="width: 100px;" class="filter-item" />
+				<el-date-picker
+					v-model="listQuery.rangeDate"
+					type="datetimerange"
+					align="right"
+					unlink-panels
+					range-separator="至"
+					start-placeholder="开始时间"
+					value-format="timestamp"
+					end-placeholder="结束时间"
+					:picker-options="pickerOptions">
+				</el-date-picker>
 				<el-button  class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
 					查询
 				</el-button>
@@ -222,7 +233,7 @@
 				<!-- <span>{{ scope.row.count }}</span> -->
 				</template>
 			</el-table-column>
-			<el-table-column label="单价"  align="center">
+			<el-table-column label="收单价"  align="center">
 				<template slot-scope="scope">
 					<template v-if="scope.row.edit&&power=='0'">
 						<el-input v-model="scope.row.price" class="edit-input" size="small" />
@@ -231,7 +242,7 @@
 				<!-- <span>{{ scope.row.price }}</span> -->
 				</template>
 			</el-table-column>
-			<el-table-column label="版费"  align="center">
+			<el-table-column label="收版费"  align="center">
 				<template slot-scope="scope">
 					<template v-if="scope.row.edit&&power=='0'">
 						<el-input v-model="scope.row.banfei" class="edit-input" size="small" />
@@ -240,7 +251,7 @@
 				<!-- <span>{{ scope.row.banfei }}</span> -->
 				</template>
 			</el-table-column>
-			<el-table-column label="加急费"  align="center">
+			<el-table-column label="收加急费"  align="center">
 				<template slot-scope="scope">
 					<template v-if="scope.row.edit&&power=='0'">
 						<el-input v-model="scope.row.jiaji" class="edit-input" size="small" />
@@ -268,6 +279,32 @@
 				<!-- <span>{{ scope.row.shoumoney }}</span> -->
 				</template>
 			</el-table-column>
+			<el-table-column label="付款方式"  align="center">
+				<template slot-scope="scope">
+					<template v-if="scope.row.edit&&power=='0'">
+						<el-select v-model="scope.row.payment" placeholder="付款方式">
+							<el-option v-for="item in paymentList" :key="item.key" :label="item.key" :value="item.value" />
+						</el-select>
+					</template>
+					<span v-else>{{ scope.row.payment }}</span>
+				</template>
+			</el-table-column>
+			<el-table-column label="付款时间"  align="center">
+				<template slot-scope="scope">
+					<template v-if="scope.row.edit&&power=='0'">
+						<el-date-picker
+							v-model="scope.row.paytime"
+							align="right"
+							type="date"
+							placeholder="选择日期"
+							value-format="yyyy-MM-dd"
+							>
+						</el-date-picker>
+						<!-- <el-input v-model="scope.row.paytime" class="edit-input" size="small" /> -->
+					</template>
+					<span v-else>{{ scope.row.paytime }}</span>
+				</template>
+			</el-table-column>
 			<el-table-column label="定金"  align="center">
 				<template slot-scope="scope">
 					<template v-if="scope.row.edit&&power=='0'">
@@ -275,6 +312,32 @@
 					</template>
 					<span v-else>{{ scope.row.dingmoney }}</span>
 				<!-- <span>{{ scope.row.dingmoney }}</span> -->
+				</template>
+			</el-table-column>
+			<el-table-column label="定金付款方式"  align="center">
+				<template slot-scope="scope">
+					<template v-if="scope.row.edit&&power=='0'">
+						<el-select v-model="scope.row.paymentding" placeholder="定金付款方式">
+							<el-option v-for="item in paymentList" :key="item.key" :label="item.key" :value="item.value" />
+						</el-select>
+					</template>
+					<span v-else>{{ scope.row.paymentding }}</span>
+				</template>
+			</el-table-column>
+			<el-table-column label="定金付款时间"  align="center">
+				<template slot-scope="scope">
+					<template v-if="scope.row.edit&&power=='0'">
+						<el-date-picker
+							v-model="scope.row.paytimeding"
+							align="right"
+							type="date"
+							placeholder="定金付款时间"
+							value-format="yyyy-MM-dd"
+							>
+						</el-date-picker>
+						<!-- <el-input v-model="scope.row.paytimeding" class="edit-input" size="small" /> -->
+					</template>
+					<span v-else>{{ scope.row.paytimeding }}</span>
 				</template>
 			</el-table-column>
 			<el-table-column label="余款"  align="center">
@@ -286,28 +349,30 @@
 				<span>{{ scope.row.shengmoney }}</span>
 				</template>
 			</el-table-column>
-			<el-table-column label="付款方式"  align="center">
+			<el-table-column label="余款付款方式"  align="center">
 				<template slot-scope="scope">
 					<template v-if="scope.row.edit&&power=='0'">
-						<el-select v-model="scope.row.payment" placeholder="付款方式">
+						<el-select v-model="scope.row.paymentyu" placeholder="余款付款方式">
 							<el-option v-for="item in paymentList" :key="item.key" :label="item.key" :value="item.value" />
 						</el-select>
-						<!-- <el-select v-model="scope.row.payment" placeholder="付款方式">
-							<el-option v-for="item in paymentList" :key="item.key" :label="item.key" :value="item.value" />
-						</el-select> -->
-						<!-- <el-input v-model="scope.row.payment" class="edit-input" size="small" /> -->
 					</template>
-					<span v-else>{{ scope.row.payment }}</span>
-				<!-- <span>{{ scope.row.payment }}</span> -->
+					<span v-else>{{ scope.row.paymentyu }}</span>
 				</template>
 			</el-table-column>
-			<el-table-column label="付款时间"  align="center">
+			<el-table-column label="余款付款时间"  align="center">
 				<template slot-scope="scope">
 					<template v-if="scope.row.edit&&power=='0'">
-						<el-input v-model="scope.row.paytime" class="edit-input" size="small" />
+						<el-date-picker
+							v-model="scope.row.paytimeyu"
+							align="right"
+							type="date"
+							placeholder="余款付款时间"
+							value-format="yyyy-MM-dd"
+							>
+						</el-date-picker>
+						<!-- <el-input v-model="scope.row.paytimeyu" class="edit-input" size="small" /> -->
 					</template>
-					<span v-else>{{ scope.row.paytime }}</span>
-				<!-- <span>{{ scope.row.paytime }}</span> -->
+					<span v-else>{{ scope.row.paytimeyu }}</span>
 				</template>
 			</el-table-column>
 			<el-table-column label="货期"  align="center">
@@ -334,7 +399,7 @@
 				<!-- <span>{{ scope.row.chejian }}</span> -->
 				</template>
 			</el-table-column>
-			<el-table-column label="单价"  align="center">
+			<el-table-column label="出单价"  align="center">
 				<template slot-scope="scope">
 					<template v-if="scope.row.edit&&power=='0'">
 						<el-input v-model="scope.row.price1" class="edit-input" size="small" />
@@ -343,7 +408,7 @@
 				<!-- <span>{{ scope.row.price1 }}</span> -->
 				</template>
 			</el-table-column>
-			<el-table-column label="版费"  align="center">
+			<el-table-column label="出版费"  align="center">
 				<template slot-scope="scope">
 					<template v-if="scope.row.edit&&power=='0'">
 						<el-input v-model="scope.row.banfei1" class="edit-input" size="small" />
@@ -352,7 +417,7 @@
 				<!-- <span>{{ scope.row.banfei1 }}</span> -->
 				</template>
 			</el-table-column>
-			<el-table-column label="加急费"  align="center">
+			<el-table-column label="出加急费"  align="center">
 				<template slot-scope="scope">
 					<template v-if="scope.row.edit&&power=='0'">
 						<el-input v-model="scope.row.jiaji1" class="edit-input" size="small" />
@@ -569,13 +634,15 @@
 							<el-upload
 								class="upload-demo"
 								name='userimg'
+								disabled
 								:action="api+'/login/login/uploadUserImg'"
 								accept="image/*"
 								:on-success="handleAvatarSuccess"
 								:data='{id:scope.row.id}'
 								:before-upload="beforeRemove"
 								>
-								<el-button size="small" type="primary" >点击上传</el-button>
+								<el-button v-if="scope.row.isduizhang =='0' " size="small" type="primary" >点击上传</el-button>
+								<el-button v-else disabled size="small" type="primary" >点击上传</el-button>
 							</el-upload>
 						</div>
 						<div v-else>
@@ -587,9 +654,9 @@
 				</template>
 				
 			</el-table-column>
-			<el-table-column label="操作" width='300' align="center"  class-name="small-padding fixed-width" fixed='right' >
+			<el-table-column label="操作" width='300' align="center"  class-name="small-padding fixed-width"  >
 				<template slot-scope="scope">
-					<template>
+					<template v-if="scope.row.isduizhang =='0'">
 						<el-button size="mini" type="primary" @click="scope.row.edit=!scope.row.edit" v-if="!scope.row.edit">
 							编辑
 						</el-button>
@@ -604,36 +671,51 @@
 						>
 							保存
 						</el-button>
-					</template>
-					<template v-if="scope.row.isfahuo =='0'" >
-						<el-button size="mini" type="primary" @click="updatehandler(scope.row,'fh')" >
-							发货
-						</el-button>
-					</template>
-					<template v-else>
-						<el-button size="mini"  disabled>
-							已发货
-						</el-button>
-					</template>
-					<template v-if="scope.row.isshendan =='0'" >
-						<el-button size="mini" type="success" @click="updatehandler(scope.row,'sd')" >
-							审单
-						</el-button>
+						<template v-if="scope.row.isfahuo =='0'" >
+							<el-button size="mini" type="primary" @click="updatehandler(scope.row,'fh')" >
+								发货
+							</el-button>
+						</template>
+						<template v-else>
+							<el-button size="mini"  disabled>
+								已发货
+							</el-button>
+						</template>
 					</template>
 					<template v-else>
-						<el-button size="mini"  disabled>
-							已审单
-						</el-button>
-					</template>
-					<template v-if="scope.row.isduizhang =='0'" >
-						<el-button size="mini" type="primary" @click="updatehandler(scope.row,'dz')">
-							对账
-						</el-button>
-					</template>
-					<template v-else>
-						<el-button size="mini"  disabled>
+						<el-button size="mini" type='info'  disabled>
 							已对账
 						</el-button>
+					</template>
+					<template v-if="power =='0'">
+						<template v-if="scope.row.isshendan =='0'" >
+							<!-- <template v-if="power =='0'"> -->
+							<el-button size="mini" type="success" @click="updatehandler(scope.row,'sd')" >
+								审单
+							</el-button>
+							<!-- </template> -->
+							<!-- <template v-else>
+								<el-button disabled size="mini" type="success" @click="updatehandler(scope.row,'sd')" >
+									审单
+								</el-button>
+							</template> -->
+						</template>
+						<template v-else>
+							<el-button size="mini"  disabled>
+								已审单
+							</el-button>
+						</template>
+						<template v-if="scope.row.isduizhang =='0'" >
+							<el-button size="mini" type="primary" @click="updatehandler(scope.row,'dz')">
+								对账
+							</el-button>
+						</template>
+						<template v-else>
+							<el-button size="mini"  disabled>
+								已对账
+							</el-button>
+						</template>
+
 					</template>
 					<el-button size="mini" type="danger" @click="deleteCustomer(scope.row)"  v-if="power == '0'">
 						删除
@@ -749,7 +831,8 @@ export default {
 			isshendan:'',
 			isduizhang:'',
 			beizhu1:'',
-			uid:getToken()
+			uid:getToken(),
+			rangeDate:[]
 		},
 		importanceOptions: [1, 2, 3],
 		calendarTypeOptions:[
@@ -823,7 +906,44 @@ export default {
 		dialogVisible:false,
 		modalUrl:'',
 		selectList:[],
-		userList:[]
+		userList:[],
+		pickerOptions: {
+			shortcuts: [{
+				text: '最近一周',
+				onClick(picker) {
+				const end = new Date();
+				const start = new Date();
+				start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+				picker.$emit('pick', [start, end]);
+				}
+			}, {
+				text: '最近一个月',
+				onClick(picker) {
+				const end = new Date();
+				const start = new Date();
+				start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+				picker.$emit('pick', [start, end]);
+				}
+			}, {
+				text: '最近三个月',
+				onClick(picker) {
+				const end = new Date();
+				const start = new Date();
+				start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+				picker.$emit('pick', [start, end]);
+				}
+			}, {
+				text: '最近一年',
+				onClick(picker) {
+				const end = new Date();
+				const start = new Date();
+				start.setTime(start.getTime() - 3600 * 1000 * 24 * 365);
+				picker.$emit('pick', [start, end]);
+				}
+			}
+			]
+		},
+		
     }
   },
   created() {
@@ -832,6 +952,13 @@ export default {
 	this.api = process.env.VUE_APP_BASE_API
   },
   methods: {
+	  rangeDateChange(v){
+		  var arr = new Array(2)
+		  arr[0] = v[0]/1000;
+		  arr[1] = v[1]/1000;
+		  console.log(arr)
+		//   this.form.rangeDate = arr
+	  },
 	  	updatehandler(row,type){
 			this.$http({
 				url: '/login/Updateuser/updateHandle',
@@ -992,8 +1119,8 @@ export default {
 		handleDownload() {
 		this.downloadLoading = true
 		import('@/utils/Export2Excel').then(excel => {
-			const tHeader = ['订单编号','定稿日期', '客户归属','客户来源', '客户', '聊天旺旺','付款旺旺', '卡名', '工艺','数量', '单价', '版费', '加急费', '收金额','实际到账金额','定金', '余款', '付款方式', '拍款日期', '车间','单价', '版费', '加急费', '卡款出', '利润','刷卡器', '系统', '邮费', '金属标签', '发票','税额', '退款', '旺旺', '总支出', '纯利', '提点', '设计', '收货地址', '快递方式', '发货时间', '物流单号', '备注', '备注1']
-			const filterVal = ['ordercode','dingdate','belong', 'source', 'kehu', 'aliwwliao','aliwwfu','card', 'gy','count','price', 'banfei', 'jiaji', 'shoumoney','realshoumoney', 'dingmoney','shengmoney','payment', 'paytime', 'chejian', 'price1', 'banfei1','jiaji1','kakuan', 'lirun', 'shuakaqi', 'system', 'youfei','label','fapiao','shuie', 'tuikuan', 'zhichu', 'chunli', 'tidian', 'sheji', 'dizhi', 'kuaidi', 'tidian','fahuotime','wuliucode','beizhu','beizhu1']
+			const tHeader = ['订单编号','定稿日期', '客户归属','客户来源', '聊天旺旺','付款旺旺', '客户类型', '卡名', '工艺','数量', '收单价', '收版费', '收加急费', '收金额','实际到账金额', '付款方式', '拍款日期','定金','定金付款方式','定金付款时间', '余款','余款付款方式','余款付款时间','货期', '车间','出单价', '出版费', '出加急费', '卡款出', '供应商结款','利润','刷卡器', '系统', '邮费', '金属标签', '发票','税额', '退款',  '总支出', '纯利', '提点', '设计', '收货地址', '快递方式', '发货时间', '物流单号', '备注', '备注1']
+			const filterVal = ['ordercode','dingdate','belong', 'source',  'aliwwliao','aliwwfu','kehu','card', 'gy','count','price', 'banfei', 'jiaji', 'shoumoney','realshoumoney','payment', 'paytime', 'dingmoney','paymentding','paytimeding','shengmoney','paymentyu','paytimeyu','huoqi', 'chejian', 'price1', 'banfei1','jiaji1','kakuan','jiekuan', 'lirun', 'shuakaqi', 'system', 'youfei','label','fapiao','shuie', 'tuikuan', 'zhichu', 'chunli', 'tidian', 'sheji', 'dizhi', 'kuaidi', 'fahuotime','wuliucode','beizhu','beizhu1']
 			const list = this.list
 			const data = this.formatJson(filterVal, list)
 			excel.export_json_to_excel({
@@ -1008,8 +1135,8 @@ export default {
 		},
 		handleDownloadSelect(){
 			import('@/utils/Export2Excel').then(excel => {
-			const tHeader = ['订单编号','定稿日期', '客户归属','客户来源', '客户', '聊天旺旺','付款旺旺', '卡名', '工艺','数量', '单价', '版费', '加急费', '收金额','实际到账金额','定金', '余款', '付款方式', '拍款日期', '车间','单价', '版费', '加急费', '卡款出', '利润','刷卡器', '系统', '邮费', '金属标签', '发票','税额', '退款', '旺旺', '总支出', '纯利', '提点', '设计', '收货地址', '快递方式', '发货时间', '物流单号', '备注', '备注1']
-			const filterVal = ['ordercode','dingdate','belong', 'source', 'kehu', 'aliwwliao','aliwwfu','card', 'gy','count','price', 'banfei', 'jiaji', 'shoumoney','realshoumoney', 'dingmoney','shengmoney','payment', 'paytime', 'chejian', 'price1', 'banfei1','jiaji1','kakuan', 'lirun', 'shuakaqi', 'system', 'youfei','label','fapiao','shuie', 'tuikuan', 'zhichu', 'chunli', 'tidian', 'sheji', 'dizhi', 'kuaidi', 'tidian','fahuotime','wuliucode','beizhu','beizhu1']
+			const tHeader = ['订单编号','定稿日期', '客户归属','客户来源', '聊天旺旺','付款旺旺', '客户类型', '卡名', '工艺','数量', '收单价', '收版费', '收加急费', '收金额','实际到账金额', '付款方式', '拍款日期','定金','定金付款方式','定金付款时间', '余款','余款付款方式','余款付款时间','货期', '车间','出单价', '出版费', '出加急费', '卡款出', '供应商结款','利润','刷卡器', '系统', '邮费', '金属标签', '发票','税额', '退款',  '总支出', '纯利', '提点', '设计', '收货地址', '快递方式', '发货时间', '物流单号', '备注', '备注1']
+			const filterVal = ['ordercode','dingdate','belong', 'source',  'aliwwliao','aliwwfu','kehu','card', 'gy','count','price', 'banfei', 'jiaji', 'shoumoney','realshoumoney','payment', 'paytime', 'dingmoney','paymentding','paytimeding','shengmoney','paymentyu','paytimeyu','huoqi', 'chejian', 'price1', 'banfei1','jiaji1','kakuan','jiekuan', 'lirun', 'shuakaqi', 'system', 'youfei','label','fapiao','shuie', 'tuikuan', 'zhichu', 'chunli', 'tidian', 'sheji', 'dizhi', 'kuaidi', 'fahuotime','wuliucode','beizhu','beizhu1']
 			const list = this.selectList
 			const data = this.formatJson(filterVal, list)
 			excel.export_json_to_excel({
@@ -1024,9 +1151,10 @@ export default {
 		resetQuery(){
 			this.listQuery =  {
 				page: 1,
-				limit: 20,
+				limit: 10,
 				status:'',
 				ordercode:'',
+				dingdate:'',
 				belong:'',
 				source: '',
 				aliwwliao:'',
@@ -1066,8 +1194,13 @@ export default {
 				kuaidi:'',
 				wuliucode:'',
 				beizhu:'',
+				isenable:1,
+				isfahuo:'',
+				isshendan:'',
+				isduizhang:'',
 				beizhu1:'',
-				uid:getToken()
+				uid:getToken(),
+				rangeDate:[]
 			}
 		},
 		formatJson(filterVal, jsonData) {

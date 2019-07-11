@@ -40,7 +40,6 @@
 					<el-option v-for="item in paymentList" :key="item.key" :label="item.key" :value="item.value" />
 				</el-select>
 				<!-- <el-input v-model="listQuery.payment" placeholder="付款方式" style="width: 100px;" class="filter-item" /> -->
-				<el-input v-model="listQuery.paytime" placeholder="付款时间" style="width: 100px;" class="filter-item" />
 				<el-input v-model="listQuery.huoqi" placeholder="付款时间" style="width: 100px;" class="filter-item" />
 				<!-- <el-input v-model="listQuery.chejian" placeholder="车间" style="width: 100px;" class="filter-item" /> -->
 				<el-select v-model="listQuery.chejian" placeholder="车间">
@@ -172,17 +171,17 @@
 				<span>{{ scope.row.count }}</span>
 				</template>
 			</el-table-column>
-			<el-table-column label="单价"  align="center">
+			<el-table-column label="收单价"  align="center">
 				<template slot-scope="scope">
 				<span>{{ scope.row.price }}</span>
 				</template>
 			</el-table-column>
-			<el-table-column label="版费"  align="center">
+			<el-table-column label="收版费"  align="center">
 				<template slot-scope="scope">
 				<span>{{ scope.row.banfei }}</span>
 				</template>
 			</el-table-column>
-			<el-table-column label="加急费"  align="center">
+			<el-table-column label="收加急费"  align="center">
 				<template slot-scope="scope">
 				<span>{{ scope.row.jiaji }}</span>
 				</template>
@@ -190,16 +189,6 @@
 			<el-table-column label="收金额"  align="center">
 				<template slot-scope="scope">
 				<span>{{ scope.row.shoumoney }}</span>
-				</template>
-			</el-table-column>
-			<el-table-column label="定金"  align="center">
-				<template slot-scope="scope">
-				<span>{{ scope.row.dingmoney }}</span>
-				</template>
-			</el-table-column>
-			<el-table-column label="余款"  align="center">
-				<template slot-scope="scope">
-				<span>{{ scope.row.shengmoney }}</span>
 				</template>
 			</el-table-column>
 			<el-table-column label="付款方式"  align="center">
@@ -212,6 +201,36 @@
 				<span>{{ scope.row.paytime }}</span>
 				</template>
 			</el-table-column>
+			<el-table-column label="定金"  align="center">
+				<template slot-scope="scope">
+				<span>{{ scope.row.dingmoney }}</span>
+				</template>
+			</el-table-column>
+			<el-table-column label="定金付款方式"  align="center">
+				<template slot-scope="scope">
+				<span>{{ scope.row.paymentding }}</span>
+				</template>
+			</el-table-column>
+			<el-table-column label="定金付款时间"  align="center">
+				<template slot-scope="scope">
+				<span>{{ scope.row.paytimeding }}</span>
+				</template>
+			</el-table-column>
+			<el-table-column label="余款"  align="center">
+				<template slot-scope="scope">
+				<span>{{ scope.row.shengmoney }}</span>
+				</template>
+			</el-table-column>
+			<el-table-column label="余款付款方式"  align="center">
+				<template slot-scope="scope">
+				<span>{{ scope.row.paymentyu }}</span>
+				</template>
+			</el-table-column>
+			<el-table-column label="余款付款时间"  align="center">
+				<template slot-scope="scope">
+				<span>{{ scope.row.paytimeyu }}</span>
+				</template>
+			</el-table-column>
 			<el-table-column label="货期"  align="center">
 				<template slot-scope="scope">
 				<span>{{ scope.row.huoqi }}</span>
@@ -222,22 +241,22 @@
 				<span>{{ scope.row.chejian }}</span>
 				</template>
 			</el-table-column>
-			<el-table-column label="单价"  align="center">
+			<el-table-column label="出单价"  align="center">
 				<template slot-scope="scope">
 				<span>{{ scope.row.price1 }}</span>
 				</template>
 			</el-table-column>
-			<el-table-column label="版费"  align="center">
+			<el-table-column label="出版费"  align="center">
 				<template slot-scope="scope">
 				<span>{{ scope.row.banfei1 }}</span>
 				</template>
 			</el-table-column>
-			<el-table-column label="加急费"  align="center">
+			<el-table-column label="出加急费"  align="center">
 				<template slot-scope="scope">
 				<span>{{ scope.row.jiaji1 }}</span>
 				</template>
 			</el-table-column>
-			<el-table-column label="卡款"  align="center">
+			<el-table-column label="卡款出"  align="center">
 				<template slot-scope="scope">
 				<span>{{ scope.row.kakuan }}</span>
 				</template>
@@ -438,7 +457,11 @@ export default {
 			shoumoney:'',
 			realshoumoney:'',
 			dingmoney:'',
+			paymentding:'',
+			paytimeding:'',
 			shengmoney:'',
+			paymentyu:'',
+			paytimeyu:'',
 			payment:'',
 			paytime:'',
 			huoqi:'',
@@ -705,8 +728,8 @@ export default {
     handleDownload() {
       this.downloadLoading = true
       import('@/utils/Export2Excel').then(excel => {
-        const tHeader = ['订单编号','定稿日期', '客户归属','客户来源', '客户', '聊天旺旺','付款旺旺', '卡名', '工艺','数量', '单价', '版费', '加急费', '收金额','定金', '余款', '旺付款方式旺', '拍款日期', '车间','单价', '版费', '加急费', '卡款出', '利润','刷卡器', '系统', '邮费', '金属标签', '发票类型','发票', '退款', '旺旺', '总支出', '纯利']
-        const filterVal = ['ordercode','dingdate','belong', 'source', 'kehu', 'aliwwliao','aliwwfu', 'gy','count','price', 'banfei', 'jiaji', 'shoumoney', 'dingmoney','shengmoney','payment', 'paytime', 'chejian', 'price1', 'banfei1','jiaji1','kakuan', 'lirun', 'shuakaqi', 'system', 'youfei','label','fapiao', 'tuikuan', 'zhichu', 'chunli']
+		const tHeader = ['订单编号','定稿日期', '客户归属','客户来源', '客户', '聊天旺旺','付款旺旺', '卡名', '工艺','数量', '收单价', '收版费', '收加急费', '收金额','定金', '定金付款方式', '定金拍款日期', '余款','余款付款方式', '余款拍款日期',  '付款方式', '拍款日期', '车间','出单价', '出版费', '出加急费', '卡款出', '利润','刷卡器', '系统', '邮费', '金属标签', '发票类型','税额', '退款', '总支出', '纯利']
+        const filterVal = ['ordercode','dingdate','belong', 'source', 'kehu', 'aliwwliao','aliwwfu', 'gy','count','price', 'banfei', 'jiaji', 'shoumoney', 'dingmoney','paymentding', 'paytimeding','shengmoney','paymentyu', 'paytimeyu','payment', 'paytime', 'chejian', 'price1', 'banfei1','jiaji1','kakuan', 'lirun', 'shuakaqi', 'system', 'youfei','label','fapiao','shuie',  'tuikuan', 'zhichu', 'chunli']
         const list = this.list
         const data = this.formatJson(filterVal, list)
         excel.export_json_to_excel({
@@ -721,8 +744,8 @@ export default {
 	},
 	handleDownloadSelect(){
 		import('@/utils/Export2Excel').then(excel => {
-        const tHeader = ['订单编号','定稿日期', '客户归属','客户来源', '客户', '聊天旺旺','付款旺旺', '卡名', '工艺','数量', '单价', '版费', '加急费', '收金额','定金', '余款', '旺付款方式旺', '拍款日期', '车间','单价', '版费', '加急费', '卡款出', '利润','刷卡器', '系统', '邮费', '金属标签', '发票类型','发票', '退款', '旺旺', '总支出', '纯利']
-        const filterVal = ['ordercode','dingdate','belong', 'source', 'kehu', 'aliwwliao','aliwwfu', 'gy','count','price', 'banfei', 'jiaji', 'shoumoney', 'dingmoney','shengmoney','payment', 'paytime', 'chejian', 'price1', 'banfei1','jiaji1','kakuan', 'lirun', 'shuakaqi', 'system', 'youfei','label','fapiao', 'tuikuan', 'zhichu', 'chunli']
+        const tHeader = ['订单编号','定稿日期', '客户归属','客户来源', '客户', '聊天旺旺','付款旺旺', '卡名', '工艺','数量', '收单价', '收版费', '收加急费', '收金额','定金', '定金付款方式', '定金拍款日期', '余款','余款付款方式', '余款拍款日期',  '付款方式', '拍款日期', '车间','出单价', '出版费', '出加急费', '卡款出', '利润','刷卡器', '系统', '邮费', '金属标签', '发票类型','税额', '退款', '总支出', '纯利']
+        const filterVal = ['ordercode','dingdate','belong', 'source', 'kehu', 'aliwwliao','aliwwfu','card', 'gy','count','price', 'banfei', 'jiaji', 'shoumoney', 'dingmoney','paymentding', 'paytimeding','shengmoney','paymentyu', 'paytimeyu','payment', 'paytime', 'chejian', 'price1', 'banfei1','jiaji1','kakuan', 'lirun', 'shuakaqi', 'system', 'youfei','label','fapiao','shuie', 'tuikuan', 'zhichu', 'chunli']
         const list = this.selectList
         const data = this.formatJson(filterVal, list)
         excel.export_json_to_excel({
@@ -755,7 +778,11 @@ export default {
 			shoumoney:'',
 			realshoumoney:'',
 			dingmoney:'',
+			paymentding:'',
+			paytimeding:'',
 			shengmoney:'',
+			paymentyu:'',
+			paytimeyu:'',
 			payment:'',
 			paytime:'',
 			huoqi:'',
