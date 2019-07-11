@@ -15,19 +15,17 @@
 
 ``` bash
 # install dependencies
-npm install
+npm install or yarn
 
-# serve with hot reload at localhost:9080
+# serve with hot reload at localhost:9528
 npm run dev
 
-# build electron app for production
-npm run build
+# build app for production
+npm run build:prod
 
 # lint all JS/Vue component files in `app/src`
 npm run lint
 
-# run webpack in production
-npm run pack
 ```
 ---
 
