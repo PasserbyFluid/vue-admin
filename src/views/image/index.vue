@@ -16,7 +16,7 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="账号权限说明" >
-                        <p style="margin:0;font-weight:bold;" v-if="form.power == '1'">（主账号审单、对账前）可以查看修改所有客户信息（副账号不可审单、对账）</p>
+                        <p style="margin:0;font-weight:bold;" v-if="form.power == '1'">（主账号审单、对账前）可以查看修改所有客户信息（副账号不可对账）</p>
                         <p style="margin:0;font-weight:bold;" v-if="form.power == '2'">（主账号审单、对账前）可以查看修改自己所属的客户信息（子账号不可审单、对账）</p>
                     </el-form-item>
                     <el-form-item>

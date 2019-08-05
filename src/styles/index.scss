@@ -61,7 +61,8 @@ div:focus {
 
 // main-container global css
 .app-container {
-  padding: 20px;
+  padding: 10px;
+  height:calc(100%-50px);
 }
 .toAnother{
   color: #fff;
@@ -77,4 +78,44 @@ div:focus {
 }
 .query-box .el-input{
   margin-top: 10px;
+}
+#list .el-table--scrollable-x .el-table__body-wrapper,#order .el-table--scrollable-x .el-table__body-wrapper{
+  height: 500px;
+    overflow-y: scroll;
+}
+.el-input__inner{
+  height: 30px;
+}
+.el-input__icon,.el-input__inner{
+  line-height:30px;
+}
+.el-date-editor .el-range-separator,.el-date-editor .el-range__icon{
+  line-height: 25px;
+}
+
+.yixiadan{
+  background: #409EFF !important
+}
+.weixiadan{
+  background: #F56C6C !important
+}
+.yishendan{
+ background: #67C23A  !important
+}
+.yiduizhang{
+  background: #909399  !important
+ }
+ .hover-row > td {
+  background-color: initial !important;
+}
+::-webkit-scrollbar {
+  width: 0;
+  // position: absolute;
+  // right: 0;
+  // top: 0;
+  background-color: #fff
+}
+
+::-webkit-scrollbar-thumb {
+  background-color:rgba(144,147,153,.3);
 }

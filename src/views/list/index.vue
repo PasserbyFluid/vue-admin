@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="app-container" id="list">
     <div class="filter-container">
 		<el-card class="box-card">
 			<div class="query-box">
@@ -123,7 +123,6 @@
 			@sort-change="sortChange"
 			>
 			<el-table-column
-					fixed
 					type="selection"
 					width="55">
 			</el-table-column>
@@ -227,7 +226,7 @@
 			<el-table-column label="数量"  align="center">
 				<template slot-scope="scope">
 					<template v-if="scope.row.edit&&power=='0'">
-						<el-input v-model="scope.row.count" class="edit-input" size="small" />
+						<el-input type='number' v-model="scope.row.count" class="edit-input" size="small" />
 					</template>
 					<span v-else>{{ scope.row.count }}</span>
 				<!-- <span>{{ scope.row.count }}</span> -->
@@ -236,7 +235,7 @@
 			<el-table-column label="收单价"  align="center">
 				<template slot-scope="scope">
 					<template v-if="scope.row.edit&&power=='0'">
-						<el-input v-model="scope.row.price" class="edit-input" size="small" />
+						<el-input type='number' v-model="scope.row.price" class="edit-input" size="small" />
 					</template>
 					<span v-else>{{ scope.row.price }}</span>
 				<!-- <span>{{ scope.row.price }}</span> -->
@@ -245,7 +244,7 @@
 			<el-table-column label="收版费"  align="center">
 				<template slot-scope="scope">
 					<template v-if="scope.row.edit&&power=='0'">
-						<el-input v-model="scope.row.banfei" class="edit-input" size="small" />
+						<el-input type='number' v-model="scope.row.banfei" class="edit-input" size="small" />
 					</template>
 					<span v-else>{{ scope.row.banfei }}</span>
 				<!-- <span>{{ scope.row.banfei }}</span> -->
@@ -254,7 +253,7 @@
 			<el-table-column label="收加急费"  align="center">
 				<template slot-scope="scope">
 					<template v-if="scope.row.edit&&power=='0'">
-						<el-input v-model="scope.row.jiaji" class="edit-input" size="small" />
+						<el-input type='number' v-model="scope.row.jiaji" class="edit-input" size="small" />
 					</template>
 					<span v-else>{{ scope.row.jiaji }}</span>
 				<!-- <span>{{ scope.row.jiaji }}</span> -->
@@ -262,18 +261,18 @@
 			</el-table-column>
 			<el-table-column label="收金额"  align="center">
 				<template slot-scope="scope">
-					<!-- <template v-if="scope.row.edit&&power=='0'">
-						<el-input v-model="scope.row.shoumoney" class="edit-input" size="small" />
+					<template v-if="scope.row.edit">
+						<span>{{ (Number(scope.row.price)*Number(scope.row.count)+Number(scope.row.jiaji)+Number(scope.row.banfei)).toFixed(2)}}</span>
 					</template>
-					<span v-else>{{ scope.row.shoumoney }}</span> -->
-				<span>{{ (scope.row.price*scope.row.count+Number(scope.row.jiaji)+Number(scope.row.banfei)).toFixed(2)}}</span>
+					<span v-else>{{ scope.row.shoumoney }}</span>
+				<!-- <span>{{ (scope.row.price*scope.row.count+Number(scope.row.jiaji)+Number(scope.row.banfei)).toFixed(2)}}</span> -->
 				<p v-if="scope.row.shoubeizhu">备注：{{scope.row.shoubeizhu}}</p>
 				</template>
 			</el-table-column>
 			<el-table-column label="实际到账金额"  align="center">
 				<template slot-scope="scope">
 					<template v-if="scope.row.edit&&power=='0'">
-						<el-input v-model="scope.row.realshoumoney" class="edit-input" size="small" />
+						<el-input type='number' v-model="scope.row.realshoumoney" class="edit-input" size="small" />
 					</template>
 					<span v-else>{{ scope.row.shoumoney }}</span>
 				<!-- <span>{{ scope.row.shoumoney }}</span> -->
@@ -308,7 +307,7 @@
 			<el-table-column label="定金"  align="center">
 				<template slot-scope="scope">
 					<template v-if="scope.row.edit&&power=='0'">
-						<el-input v-model="scope.row.dingmoney" class="edit-input" size="small" />
+						<el-input  type='number' v-model="scope.row.dingmoney" class="edit-input" size="small" />
 					</template>
 					<span v-else>{{ scope.row.dingmoney }}</span>
 				<!-- <span>{{ scope.row.dingmoney }}</span> -->
@@ -411,7 +410,7 @@
 			<el-table-column label="出版费"  align="center">
 				<template slot-scope="scope">
 					<template v-if="scope.row.edit&&power=='0'">
-						<el-input v-model="scope.row.banfei1" class="edit-input" size="small" />
+						<el-input type='number' v-model="scope.row.banfei1" class="edit-input" size="small" />
 					</template>
 					<span v-else>{{ scope.row.banfei1 }}</span>
 				<!-- <span>{{ scope.row.banfei1 }}</span> -->
@@ -420,7 +419,7 @@
 			<el-table-column label="出加急费"  align="center">
 				<template slot-scope="scope">
 					<template v-if="scope.row.edit&&power=='0'">
-						<el-input v-model="scope.row.jiaji1" class="edit-input" size="small" />
+						<el-input type='number' v-model="scope.row.jiaji1" class="edit-input" size="small" />
 					</template>
 					<span v-else>{{ scope.row.jiaji1 }}</span>
 				<!-- <span>{{ scope.row.jiaji1 }}</span> -->
@@ -428,11 +427,11 @@
 			</el-table-column>
 			<el-table-column label="卡款出"  align="center">
 				<template slot-scope="scope">
-					<!-- <template v-if="scope.row.edit&&power=='0'">
-						<el-input v-model="scope.row.kakuan" class="edit-input" size="small" />
+					<template v-if="scope.row.edit">
+						<span >{{(Number(scope.row.price1) * Number(scope.row.count) + Number(scope.row.banfei1) + Number(scope.row.jiaji1)).toFixed(2)}}</span>
 					</template>
-					<span v-else>{{ scope.row.kakuan }}</span> -->
-				<span>{{ scope.row.kakuan }}</span>
+					<span v-else>{{ scope.row.kakuan }}</span>
+				<!-- <span>{{ scope.row.kakuan }}</span> -->
 				</template>
 			</el-table-column>
 			<el-table-column label="供应商结款 "  align="center" width="100">
@@ -446,17 +445,17 @@
 			</el-table-column>
 			<el-table-column label="利润"  align="center">
 				<template slot-scope="scope">
-					<!-- <template v-if="scope.row.edit&&power=='0'">
-						<el-input v-model="scope.row.lirun" class="edit-input" size="small" />
+					<template v-if="scope.row.edit">
+						<span>{{ Number(scope.row.realshoumoney) -(Number(scope.row.price1) * Number(scope.row.count) + Number(scope.row.banfei1) + Number(scope.row.jiaji1)).toFixed(2) }}</span>
 					</template>
-					<span v-else>{{ scope.row.lirun }}</span> -->
-				<span>{{ scope.row.lirun }}</span>
+					<span v-else>{{ scope.row.lirun }}</span>
+				<!-- <span>{{ scope.row.lirun }}</span> -->
 				</template>
 			</el-table-column>
 			<el-table-column label="刷卡器"  align="center">
 				<template slot-scope="scope">
 					<template v-if="scope.row.edit&&power=='0'">
-						<el-input v-model="scope.row.shuakaqi" class="edit-input" size="small" />
+						<el-input type='number' v-model="scope.row.shuakaqi" class="edit-input" size="small" />
 					</template>
 					<span v-else>{{ scope.row.shuakaqi }}</span>
 				<!-- <span>{{ scope.row.shuakaqi }}</span> -->
@@ -465,7 +464,7 @@
 			<el-table-column label="系统"  align="center">
 				<template slot-scope="scope">
 					<template v-if="scope.row.edit&&power=='0'">
-						<el-input v-model="scope.row.system" class="edit-input" size="small" />
+						<el-input type='number' v-model="scope.row.system" class="edit-input" size="small" />
 					</template>
 					<span v-else>{{ scope.row.system }}</span>
 				<!-- <span>{{ scope.row.system }}</span> -->
@@ -474,7 +473,7 @@
 			<el-table-column label="邮费"  align="center">
 				<template slot-scope="scope">
 					<template v-if="scope.row.edit&&power=='0'">
-						<el-input v-model="scope.row.youfei" class="edit-input" size="small" />
+						<el-input type='number' v-model="scope.row.youfei" class="edit-input" size="small" />
 					</template>
 					<span v-else>{{ scope.row.youfei }}</span>
 				<!-- <span>{{ scope.row.youfei }}</span> -->
@@ -483,7 +482,7 @@
 			<el-table-column label="金属标签"  align="center">
 				<template slot-scope="scope">
 					<template v-if="scope.row.edit&&power=='0'">
-						<el-input v-model="scope.row.label" class="edit-input" size="small" />
+						<el-input type='number' v-model="scope.row.label" class="edit-input" size="small" />
 					</template>
 					<span v-else>{{ scope.row.label }}</span>
 				<!-- <span>{{ scope.row.label }}</span> -->
@@ -519,20 +518,20 @@
 			</el-table-column>
 			<el-table-column label="总支出"  align="center">
 				<template slot-scope="scope">
-					<!-- <template v-if="scope.row.edit&&power=='0'">
-						<el-input v-model="scope.row.zhichu" class="edit-input" size="small" />
+					<template v-if="scope.row.edit">
+						<span>{{ ( Number(scope.row.price1) * Number(scope.row.count) + Number(scope.row.banfei1) + Number(scope.row.jiaji1)+Number(scope.row.shuakaqi) + Number(scope.row.system) +Number(scope.row.youfei)+Number(scope.row.label)+Number(scope.row.shuie)+Number(scope.row.tuikuan)).toFixed(2) }}</span>
 					</template>
-					<span v-else>{{ scope.row.zhichu }}</span> -->
-				<span>{{ ( Number(scope.row.kakuan)+Number(scope.row.shuakaqi) + Number(scope.row.system) +Number(scope.row.youfei)+Number(scope.row.label)+Number(scope.row.shuie)+Number(scope.row.tuikuan)).toFixed(2) }}</span>
+					<span v-else>{{ scope.row.zhichu }}</span>
+				<!-- <span>{{ ( Number(scope.row.kakuan)+Number(scope.row.shuakaqi) + Number(scope.row.system) +Number(scope.row.youfei)+Number(scope.row.label)+Number(scope.row.shuie)+Number(scope.row.tuikuan)).toFixed(2) }}</span> -->
 				</template>
 			</el-table-column>
 			<el-table-column label="纯利"  align="center">
 				<template slot-scope="scope">
-					<!-- <template v-if="scope.row.edit&&power=='0'">
-						<el-input v-model="scope.row.chunli" class="edit-input" size="small" />
+					<template v-if="scope.row.edit">
+						<span>{{ scope.row.realshoumoney -( Number(scope.row.price1) * Number(scope.row.count) + Number(scope.row.banfei1) + Number(scope.row.jiaji1)+Number(scope.row.shuakaqi) + Number(scope.row.system) +Number(scope.row.youfei)+Number(scope.row.label)+Number(scope.row.shuie)+Number(scope.row.tuikuan)).toFixed(2) }}</span>
 					</template>
-					<span v-else>{{ scope.row.chunli }}</span> -->
-				<span>{{ scope.row.chunli }}</span>
+					<span v-else>{{ scope.row.chunli }}</span>
+				<!-- <span>{{ scope.row.chunli }}</span> -->
 				</template>
 			</el-table-column>
 			<el-table-column label="提点"  align="center">
@@ -565,7 +564,10 @@
 			<el-table-column label="快递方式"  align="center">
 				<template slot-scope="scope">
 					<template v-if="scope.row.edit">
-						<el-input v-model="scope.row.kuaidi" class="edit-input" size="small" />
+						<el-select  v-model="scope.row.kuaidi" placeholder="快递方式" clearable filterable allow-create default-first-option>
+							<el-option  v-for="item in kuaidiList" :key="item.key" :label="item.key" :value="item.value" />
+						</el-select>
+						<!-- <el-input v-model="scope.row.kuaidi" class="edit-input" size="small" /> -->
 					</template>
 					<span v-else>{{ scope.row.kuaidi }}</span>
 				<!-- <span>{{ scope.row.kuaidi }}</span> -->
@@ -667,7 +669,7 @@
 							v-if="scope.row.edit"
 							type="success"
 							size="mini"
-							@click="confirmEdit(scope.row)"
+							@click="confirmEdit(scope)"
 						>
 							保存
 						</el-button>
@@ -687,53 +689,34 @@
 							已对账
 						</el-button>
 					</template>
-					<template v-if="power =='0'">
+					<template v-if="power =='1' || power =='0'">
 						<template v-if="scope.row.isshendan =='0'" >
-							<!-- <template v-if="power =='0'"> -->
 							<el-button size="mini" type="success" @click="updatehandler(scope.row,'sd')" >
 								审单
 							</el-button>
-							<!-- </template> -->
-							<!-- <template v-else>
-								<el-button disabled size="mini" type="success" @click="updatehandler(scope.row,'sd')" >
-									审单
-								</el-button>
-							</template> -->
 						</template>
 						<template v-else>
 							<el-button size="mini"  disabled>
 								已审单
 							</el-button>
 						</template>
-						<template v-if="scope.row.isduizhang =='0'" >
-							<el-button size="mini" type="primary" @click="updatehandler(scope.row,'dz')">
-								对账
-							</el-button>
+						<template v-if="power =='0'">
+							<template v-if="scope.row.isduizhang =='0'" >
+								<el-button size="mini" type="primary" @click="updatehandler(scope.row,'dz')">
+									对账
+								</el-button>
+							</template>
+							<template v-else>
+								<el-button size="mini"  disabled>
+									已对账
+								</el-button>
+							</template>
 						</template>
-						<template v-else>
-							<el-button size="mini"  disabled>
-								已对账
-							</el-button>
-						</template>
+						<el-button size="mini" type="danger" @click="deleteCustomer(scope.row)" >
+							删除
+						</el-button>
 
 					</template>
-					<el-button size="mini" type="danger" @click="deleteCustomer(scope.row)"  v-if="power == '0'">
-						删除
-					</el-button>
-					<!-- <div v-if="scope.row.url !==null" style="margin-top:5px;display:inline-block">
-						<el-upload
-							class="upload-demo"
-							name='userimg'
-							:action="api+'/login/login/uploadUserImg'"
-							accept="image/*"
-							:show-file-list='false'
-							:on-success="handleAvatarSuccess"
-							:data='{id:scope.row.id}'
-							:before-upload="beforeRemove"
-							>
-							<el-button size="mini" type="primary" >修改</el-button>
-						</el-upload>
-					</div> -->
 				</template>
 			</el-table-column>
 			</el-table>
@@ -842,19 +825,23 @@ export default {
 			{key:'线下客',value:'线下客'},
 		],
 		paymentList:[
-			{key:'北京恒泰迅捷',value:'北京恒泰迅捷'},
-			{key:'深圳市共荣达',value:'深圳市共荣达'},
+			{key:'拍款自然的风',value:'拍款自然的风'},
+			{key:'拍款楚状元',value:'拍款楚状元'},
+			{key:'拍款卡世界(企业店)',value:'拍款卡世界(企业店)'},
+			{key:'对公:北京恒泰迅捷',value:'对公:北京恒泰迅捷'},
+			{key:'对公:深圳市共荣达',value:'对公:深圳市共荣达'},
+			{key:'线下汇支付宝',value:'线下汇支付宝'},
 			{key:'卡世界微信',value:'卡世界微信'},
-			{key:'卡福微信',value:'卡福微信'},
 			{key:'客服微信',value:'客服微信'},
-			{key:'个人账号',value:'个人账号'},
-			{key:'工行',value:'工行'},
-			{key:'农行',value:'农行'},
-			{key:'建行',value:'建行'},
+			{key:'卡福微信',value:'卡福微信'},
+			{key:'个人账户工行',value:'个人账户工行'},
+			{key:'个人账户农行',value:'个人账户农行'},
+			{key:'个人账户建行',value:'个人账户建行'},
 		],
 		chejianList:[
 			{key:'卡蛙',value:'卡蛙-广州市',add:' 广州市'},
 			{key:'万联',value:'卡蛙-东莞市',add:' 东莞市'},
+			{key:'俊酷',value:'俊酷-北京市',add:' 北京市'},
 			{key:'建和',value:'建和-深圳市',add:' 深圳市'},
 			{key:'博天瑞',value:'博天瑞-深圳市',add:' 深圳市'},
 			{key:'弘辉',value:'弘辉-深圳市',add:' 深圳市'},
@@ -874,6 +861,18 @@ export default {
 			{key:'侯许',value:'侯许-北京市房山',add:'北京市房山'},
 			{key:'一卡易软件（开户）',value:'一卡易软件（开户）',add:''},
 			{key:'读卡器 缔美珂',value:'读卡器 缔美珂-浙江宁波',add:'浙江宁波'},
+		],
+		kuaidiList:[
+			{key:'德邦快递',value:'德邦快递'},
+			{key:'顺丰快递',value:'顺丰快递'},
+			{key:'优速快递',value:'优速快递'},
+			{key:'申通快递',value:'申通快递'},
+			{key:'中通快递',value:'中通快递'},
+			{key:'圆通快递',value:'圆通快递'},
+			{key:'韵达快递',value:'韵达快递'},
+			{key:'邮政EMS',value:'邮政EMS'},
+			{key:'百世快递',value:'百世快递'},
+			{key:'德邦物流',value:'德邦物流'},
 		],
 		sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
 		statusOptions: ['published', 'draft', 'deleted'],
@@ -992,12 +991,19 @@ export default {
 			}).catch(()=>{
 			})
 		},
-		confirmEdit(row) {
-			row.uid = getToken()
+		confirmEdit(scope) {
+			scope.row.shoumoney = (Number(scope.row.price)*Number(scope.row.count)+Number(scope.row.jiaji)+Number(scope.row.banfei)).toFixed(2);
+			scope.row.kakuan = (Number(scope.row.price1) * Number(scope.row.count) + Number(scope.row.banfei1) + Number(scope.row.jiaji1)).toFixed(2);
+			scope.row.shengmoney = Number(scope.row.realshoumoney) - Number(scope.row.dingmoney) ;
+			scope.row.zhichu = ( Number(scope.row.price1) * Number(scope.row.count) + Number(scope.row.banfei1) + Number(scope.row.jiaji1)+Number(scope.row.shuakaqi) + Number(scope.row.system) +Number(scope.row.youfei)+Number(scope.row.label)+Number(scope.row.shuie)+Number(scope.row.tuikuan)).toFixed(2);
+			scope.row.lirun = Number(scope.row.realshoumoney) -(Number(scope.row.price1) * Number(scope.row.count) + Number(scope.row.banfei1) + Number(scope.row.jiaji1)).toFixed(2);
+			scope.row.chunli = Number(scope.row.realshoumoney) -( Number(scope.row.price1) * Number(scope.row.count) + Number(scope.row.banfei1) + Number(scope.row.jiaji1)+Number(scope.row.shuakaqi) + Number(scope.row.system) +Number(scope.row.youfei)+Number(scope.row.label)+Number(scope.row.shuie)+Number(scope.row.tuikuan)).toFixed(2);
+			scope.row.uid = getToken()
+
 			this.$http({
 				url: '/login/login/updatecustomer',
 				method: 'post',
-				data:row
+				data:scope.row
 			}).then((res) => {
 				if (res.code == 1) {
 					this.$notify({
@@ -1020,8 +1026,7 @@ export default {
 				});
 			})
 			// updatecustomer
-			row.edit = false
-			row.originalTitle = row.title
+			scope.row.edit = false
 		},
 		showModal(url){
 			this.modalUrl = url;

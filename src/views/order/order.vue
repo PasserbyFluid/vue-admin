@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="app-container" id="order">
     <div class="filter-container">
 		<el-card class="box-card">
 			<div class="query-box">
@@ -119,181 +119,364 @@
 			</el-table-column>
 			<el-table-column label="定稿日期"  align="center" width="100px">
 				<template slot-scope="scope">
-					<span>{{ scope.row.dingdate }}</span>
+					<template v-if="scope.row.edit">
+						<el-input v-model="scope.row.dingdate" class="edit-input" size="small" />
+					</template>
+					<span v-else>{{ scope.row.dingdate }}</span>
 				</template>
 			</el-table-column>
 			<el-table-column label="客户归属"  align="center" v-if="power == '0'"  width="150px">
 				<template slot-scope="scope">
-					<span>{{ scope.row.belong }}</span>
+					<template v-if="scope.row.edit">
+						<el-select v-if="power == '0'" v-model="scope.row.belong" placeholder="客户归属" clearable>
+							<el-option v-for="item in userList" :key="item.id" :label="item.username" :value="item.username" />
+						</el-select>
+						<!-- <el-input v-model="scope.row.belong" class="edit-input" size="small" /> -->
+					</template>
+					<span v-else>{{ scope.row.belong }}</span>
+					<!-- <span>{{ scope.row.belong }}</span> -->
 				</template>
 			</el-table-column>
 			<el-table-column label="客户来源"  align="center">
 				<template slot-scope="scope">
-					<span>{{ scope.row.source}}</span>
+					<template v-if="scope.row.edit">
+						<el-select v-model="scope.row.source" placeholder="选择客户来源"  clearable filterable allow-create default-first-option>
+							<el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.key" :value="item.value" />
+						</el-select>
+						<!-- <el-input v-model="scope.row.source" class="edit-input" size="small" /> -->
+					</template>
+					<span v-else>{{ scope.row.source }}</span>
+					<!-- <span>{{ scope.row.source}}</span> -->
 				</template>
 			</el-table-column>
-			<el-table-column label="聊天旺旺"  width="150px"  align="center">
-				<template slot-scope="{row}">
-				<span class="link-type">{{ row.aliwwliao }}</span>
+			<el-table-column label="聊天旺旺"    align="center">
+				<template slot-scope="scope">
+					<template v-if="scope.row.edit">
+						<el-input v-model="scope.row.aliwwliao" class="edit-input" size="small" />
+					</template>
+					<span v-else>{{ scope.row.aliwwliao }}</span>
+					<!-- <span class="link-type">{{ row.aliwwliao }}</span> -->
 				</template>
 			</el-table-column>
-			<el-table-column label="付款旺旺"  width="150px"  align="center">
-				<template slot-scope="{row}">
-				<span class="link-type">{{ row.aliwwfu }}</span>
+			<el-table-column label="付款旺旺"    align="center">
+				<template slot-scope="scope">
+					<template v-if="scope.row.edit">
+						<el-input v-model="scope.row.aliwwfu" class="edit-input" size="small" />
+					</template>
+					<span v-else>{{ scope.row.aliwwfu }}</span>
+				<!-- <span class="link-type">{{ row.aliwwfu }}</!-->
 				</template>
 			</el-table-column>
-			<el-table-column label="客户"  width="100px"  align="center" show-overflow-tooltip>
-				<!-- <template slot-scope="scope">
-					<el-popover trigger="hover" placement="top">
-					<p>姓名: {{ scope.row.kehu }}</p>
-					<p>住址: {{ scope.row.kehu }}</p>
-					<div slot="reference" class="name-wrapper">
-						<el-tag size="medium">{{ scope.row.kehu }}</el-tag>
-					</div>
-					</el-popover>
-				</template> -->
-				<template slot-scope="{row}">
-				<span class="link-type">{{ row.kehu }}</span>
+			<el-table-column label="客户类型"  width="100px"  align="center" show-overflow-tooltip>
+				<template slot-scope="scope">
+					<template v-if="scope.row.edit">
+						<el-select v-model="scope.row.kehu" placeholder="选择客户类型"  clearable filterable allow-create default-first-option>
+							<el-option label="店面" value="店面"/>
+							<el-option label="公司" value="公司"/>
+							<el-option label="印刷广告" value="印刷广告"/>
+							<el-option label="设计" value="设计"/>
+							<el-option label="软件公司" value="软件公司"/>
+						</el-select>
+						<!-- <el-input v-model="scope.row.kehu" class="edit-input" size="small" /> -->
+					</template>
+					<span v-else>{{ scope.row.kehu }}</span>
+				<!-- <span class="link-type">{{ row.kehu }}</span> -->
 				</template>
 			</el-table-column>
 			<el-table-column label="卡名"  align="center"  width="200px">
 				<template slot-scope="scope">
-				<span>{{ scope.row.card }}</span>
+					<template v-if="scope.row.edit">
+						<el-input v-model="scope.row.card" class="edit-input" size="small" />
+					</template>
+					<span v-else>{{ scope.row.card }}</span>
+				<!-- <span>{{ scope.row.card }}</span> -->
 				</template>
 			</el-table-column>
 			<el-table-column label="工艺"  align="center">
 				<template slot-scope="scope">
-				<span>{{ scope.row.gy }}</span>
+					<template v-if="scope.row.edit">
+						<el-input v-model="scope.row.gy" class="edit-input" size="small" />
+					</template>
+					<span v-else>{{ scope.row.gy }}</span>
+				<!-- <span>{{ scope.row.gy }}</span> -->
 				</template>
 			</el-table-column>
 			<el-table-column label="数量"  align="center">
 				<template slot-scope="scope">
-				<span>{{ scope.row.count }}</span>
+					<template v-if="scope.row.edit">
+						<el-input type='number' v-model="scope.row.count" class="edit-input" size="small" />
+					</template>
+					<span v-else>{{ scope.row.count }}</span>
+				<!-- <span>{{ scope.row.count }}</span> -->
 				</template>
 			</el-table-column>
 			<el-table-column label="收单价"  align="center">
 				<template slot-scope="scope">
-				<span>{{ scope.row.price }}</span>
+					<template v-if="scope.row.edit">
+						<el-input type='number' v-model="scope.row.price" class="edit-input" size="small" />
+					</template>
+					<span v-else>{{ scope.row.price }}</span>
+				<!-- <span>{{ scope.row.price }}</span> -->
 				</template>
 			</el-table-column>
 			<el-table-column label="收版费"  align="center">
 				<template slot-scope="scope">
-				<span>{{ scope.row.banfei }}</span>
+					<template v-if="scope.row.edit">
+						<el-input type='number' v-model="scope.row.banfei" class="edit-input" size="small" />
+					</template>
+					<span v-else>{{ scope.row.banfei }}</span>
+				<!-- <span>{{ scope.row.banfei }}</span> -->
 				</template>
 			</el-table-column>
 			<el-table-column label="收加急费"  align="center">
 				<template slot-scope="scope">
-				<span>{{ scope.row.jiaji }}</span>
+					<template v-if="scope.row.edit">
+						<el-input type='number' v-model="scope.row.jiaji" class="edit-input" size="small" />
+					</template>
+					<span v-else>{{ scope.row.jiaji }}</span>
+				<!-- <span>{{ scope.row.jiaji }}</span> -->
 				</template>
 			</el-table-column>
 			<el-table-column label="收金额"  align="center">
 				<template slot-scope="scope">
-				<span>{{ scope.row.shoumoney }}</span>
+					<template v-if="scope.row.edit">
+						<span>{{ (Number(scope.row.price)*Number(scope.row.count)+Number(scope.row.jiaji)+Number(scope.row.banfei)).toFixed(2)}}</span>
+					</template>
+					<span v-else>{{ scope.row.shoumoney }}</span>
+				<!-- <span>{{ (scope.row.price*scope.row.count+Number(scope.row.jiaji)+Number(scope.row.banfei)).toFixed(2)}}</span> -->
+				<p v-if="scope.row.shoubeizhu">备注：{{scope.row.shoubeizhu}}</p>
+				</template>
+			</el-table-column>
+			<el-table-column label="实际到账金额"  align="center">
+				<template slot-scope="scope">
+					<template v-if="scope.row.edit">
+						<el-input type='number' v-model="scope.row.realshoumoney" class="edit-input" size="small" />
+					</template>
+					<span v-else>{{ scope.row.realshoumoney }}</span>
+				<!-- <span>{{ scope.row.shoumoney }}</span> -->
 				</template>
 			</el-table-column>
 			<el-table-column label="付款方式"  align="center">
 				<template slot-scope="scope">
-				<span>{{ scope.row.payment }}</span>
+					<template v-if="scope.row.edit">
+						<el-select v-model="scope.row.payment" placeholder="付款方式" clearable filterable allow-create default-first-option>
+							<el-option v-for="item in paymentList" :key="item.key" :label="item.key" :value="item.value" />
+						</el-select>
+					</template>
+					<span v-else>{{ scope.row.payment }}</span>
 				</template>
 			</el-table-column>
 			<el-table-column label="付款时间"  align="center">
 				<template slot-scope="scope">
-				<span>{{ scope.row.paytime }}</span>
+					<template v-if="scope.row.edit">
+						<el-date-picker
+							v-model="scope.row.paytime"
+							align="right"
+							type="date"
+							placeholder="选择日期"
+							value-format="yyyy-MM-dd"
+							>
+						</el-date-picker>
+						<!-- <el-input v-model="scope.row.paytime" class="edit-input" size="small" /> -->
+					</template>
+					<span v-else>{{ scope.row.paytime }}</span>
 				</template>
 			</el-table-column>
 			<el-table-column label="定金"  align="center">
 				<template slot-scope="scope">
-				<span>{{ scope.row.dingmoney }}</span>
+					<template v-if="scope.row.edit">
+						<el-input type='number' v-model="scope.row.dingmoney" class="edit-input" size="small" />
+					</template>
+					<span v-else>{{ scope.row.dingmoney }}</span>
+				<!-- <span>{{ scope.row.dingmoney }}</span> -->
 				</template>
 			</el-table-column>
 			<el-table-column label="定金付款方式"  align="center">
 				<template slot-scope="scope">
-				<span>{{ scope.row.paymentding }}</span>
+					<template v-if="scope.row.edit">
+						<el-select v-model="scope.row.paymentding" placeholder="定金付款方式" clearable filterable allow-create default-first-option>
+							<el-option v-for="item in paymentList" :key="item.key" :label="item.key" :value="item.value" />
+						</el-select>
+					</template>
+					<span v-else>{{ scope.row.paymentding }}</span>
 				</template>
 			</el-table-column>
 			<el-table-column label="定金付款时间"  align="center">
 				<template slot-scope="scope">
-				<span>{{ scope.row.paytimeding }}</span>
+					<template v-if="scope.row.edit">
+						<el-date-picker
+							v-model="scope.row.paytimeding"
+							align="right"
+							type="date"
+							placeholder="定金付款时间"
+							value-format="yyyy-MM-dd"
+							>
+						</el-date-picker>
+						<!-- <el-input v-model="scope.row.paytimeding" class="edit-input" size="small" /> -->
+					</template>
+					<span v-else>{{ scope.row.paytimeding }}</span>
 				</template>
 			</el-table-column>
 			<el-table-column label="余款"  align="center">
 				<template slot-scope="scope">
-				<span>{{ scope.row.shengmoney }}</span>
+					<template v-if="scope.row.edit">
+						<span>{{ Number(scope.row.realshoumoney) - Number(scope.row.dingmoney)  }}</span>
+					</template>
+					<span v-else>{{ scope.row.shengmoney }}</span>
+				<!-- <span>{{ scope.row.shengmoney }}</span> -->
 				</template>
 			</el-table-column>
 			<el-table-column label="余款付款方式"  align="center">
 				<template slot-scope="scope">
-				<span>{{ scope.row.paymentyu }}</span>
+					<template v-if="scope.row.edit">
+						<el-select v-model="scope.row.paymentyu" placeholder="余款付款方式" clearable filterable allow-create default-first-option>
+							<el-option v-for="item in paymentList" :key="item.key" :label="item.key" :value="item.value" />
+						</el-select>
+					</template>
+					<span v-else>{{ scope.row.paymentyu }}</span>
 				</template>
 			</el-table-column>
 			<el-table-column label="余款付款时间"  align="center">
 				<template slot-scope="scope">
-				<span>{{ scope.row.paytimeyu }}</span>
+					<template v-if="scope.row.edit">
+						<el-date-picker
+							v-model="scope.row.paytimeyu"
+							align="right"
+							type="date"
+							placeholder="余款付款时间"
+							value-format="yyyy-MM-dd"
+							>
+						</el-date-picker>
+						<!-- <el-input v-model="scope.row.paytimeyu" class="edit-input" size="small" /> -->
+					</template>
+					<span v-else>{{ scope.row.paytimeyu }}</span>
 				</template>
 			</el-table-column>
 			<el-table-column label="货期"  align="center">
 				<template slot-scope="scope">
-				<span>{{ scope.row.huoqi }}</span>
+					<template v-if="scope.row.edit">
+						<el-input v-model="scope.row.huoqi" class="edit-input" size="small" />
+					</template>
+					<span v-else>{{ scope.row.huoqi }}</span>
+				<!-- <span>{{ scope.row.huoqi }}</span> -->
 				</template>
 			</el-table-column>
 			<el-table-column label="车间"  align="center">
 				<template slot-scope="scope">
-				<span>{{ scope.row.chejian }}</span>
+					<template v-if="scope.row.edit">
+						<el-select v-model="scope.row.chejian" placeholder="选择车间" clearable filterable allow-create default-first-option>
+							<el-option v-for="item in chejianList" :key="item.key" :label="item.key" :value="item.value" >
+								<span style="float: left">{{ item.key }}</span>
+								<span style="float: right; color: #8492a6; font-size: 13px">{{ item.add }}</span>
+							</el-option>
+						</el-select>
+						<!-- <el-input v-model="scope.row.chejian" class="edit-input" size="small" /> -->
+					</template>
+					<span v-else>{{ scope.row.chejian }}</span>
+				<!-- <span>{{ scope.row.chejian }}</span> -->
 				</template>
 			</el-table-column>
 			<el-table-column label="出单价"  align="center">
 				<template slot-scope="scope">
-				<span>{{ scope.row.price1 }}</span>
+					<template v-if="scope.row.edit">
+						<el-input type='number' v-model="scope.row.price1" class="edit-input" size="small" />
+					</template>
+					<span v-else>{{ scope.row.price1 }}</span>
+				<!-- <span>{{ scope.row.price1 }}</span> -->
 				</template>
 			</el-table-column>
 			<el-table-column label="出版费"  align="center">
 				<template slot-scope="scope">
-				<span>{{ scope.row.banfei1 }}</span>
+					<template v-if="scope.row.edit">
+						<el-input type='number' v-model="scope.row.banfei1" class="edit-input" size="small" />
+					</template>
+					<span v-else>{{ scope.row.banfei1 }}</span>
+				<!-- <span>{{ scope.row.banfei1 }}</span> -->
 				</template>
 			</el-table-column>
 			<el-table-column label="出加急费"  align="center">
 				<template slot-scope="scope">
-				<span>{{ scope.row.jiaji1 }}</span>
+					<template v-if="scope.row.edit">
+						<el-input type='number' v-model="scope.row.jiaji1" class="edit-input" size="small" />
+					</template>
+					<span v-else>{{ scope.row.jiaji1 }}</span>
+				<!-- <span>{{ scope.row.jiaji1 }}</span> -->
 				</template>
 			</el-table-column>
 			<el-table-column label="卡款出"  align="center">
 				<template slot-scope="scope">
-				<span>{{ scope.row.kakuan }}</span>
+					<template v-if="scope.row.edit">
+						<span >{{(Number(scope.row.price1) * Number(scope.row.count) + Number(scope.row.banfei1) + Number(scope.row.jiaji1)).toFixed(2)}}</span>
+					</template>
+					<span v-else>{{ scope.row.kakuan }}</span>
 				</template>
 			</el-table-column>
 			<el-table-column label="供应商结款 "  align="center" width="100">
 				<template slot-scope="scope">
-				<span>{{ scope.row.jiekuan }}</span>
+					<template v-if="scope.row.edit">
+						<el-input v-model="scope.row.jiekuan" class="edit-input" size="small" />
+					</template>
+					<span v-else>{{ scope.row.jiekuan }}</span>
+				<!-- <span>{{ scope.row.jiekuan }}</span> -->
 				</template>
 			</el-table-column>
 			<el-table-column label="利润"  align="center">
 				<template slot-scope="scope">
-				<span>{{ scope.row.lirun }}</span>
+					<template v-if="scope.row.edit">
+						<span>{{ Number(scope.row.realshoumoney) -(Number(scope.row.price1) * Number(scope.row.count) + Number(scope.row.banfei1) + Number(scope.row.jiaji1)).toFixed(2) }}</span>
+					</template>
+					<span v-else>{{ scope.row.lirun }}</span>
+				<!-- <span>{{ scope.row.lirun }}</span> -->
 				</template>
 			</el-table-column>
 			<el-table-column label="刷卡器"  align="center">
 				<template slot-scope="scope">
-				<span>{{ scope.row.shuakaqi }}</span>
+					<template v-if="scope.row.edit">
+						<el-input type='number' v-model="scope.row.shuakaqi" class="edit-input" size="small" />
+					</template>
+					<span v-else>{{ scope.row.shuakaqi }}</span>
+				<!-- <span>{{ scope.row.shuakaqi }}</span> -->
 				</template>
 			</el-table-column>
 			<el-table-column label="系统"  align="center">
 				<template slot-scope="scope">
-				<span>{{ scope.row.system }}</span>
+					<template v-if="scope.row.edit">
+						<el-input type='number' v-model="scope.row.system" class="edit-input" size="small" />
+					</template>
+					<span v-else>{{ scope.row.system }}</span>
+				<!-- <span>{{ scope.row.system }}</span> -->
 				</template>
 			</el-table-column>
 			<el-table-column label="邮费"  align="center">
 				<template slot-scope="scope">
-				<span>{{ scope.row.youfei }}</span>
+					<template v-if="scope.row.edit">
+						<el-input type='number' v-model="scope.row.youfei" class="edit-input" size="small" />
+					</template>
+					<span v-else>{{ scope.row.youfei }}</span>
+				<!-- <span>{{ scope.row.youfei }}</span> -->
 				</template>
 			</el-table-column>
 			<el-table-column label="金属标签"  align="center">
 				<template slot-scope="scope">
-				<span>{{ scope.row.label }}</span>
+					<template v-if="scope.row.edit">
+						<el-input type='number' v-model="scope.row.label" class="edit-input" size="small" />
+					</template>
+					<span v-else>{{ scope.row.label }}</span>
+				<!-- <span>{{ scope.row.label }}</span> -->
 				</template>
 			</el-table-column>
 			<el-table-column label="发票"  align="center">
 				<template slot-scope="scope">
-				<span>{{ scope.row.fapiao }}</span>
+					<template v-if="scope.row.edit">
+						<el-select v-model="scope.row.fapiao" placeholder="发票税点 " clearable filterable allow-create default-first-option>
+							<el-option label="普通发票6%" value="普通发票6%"/>
+							<el-option label="专用发票6%" value="专用发票6%"/>
+							<el-option label="专用发票13%" value="专用发票13%"/>
+						</el-select>
+						<!-- <el-input v-model="scope.row.fapiao" class="edit-input" size="small" /> -->
+					</template>
+					<span v-else>{{ scope.row.fapiao }}</span>
+				<!-- <span>{{ scope.row.fapiao }}</span> -->
 				</template>
 			</el-table-column>
 			<el-table-column label="税额"  align="center">
@@ -303,56 +486,150 @@
 			</el-table-column>
 			<el-table-column label="退款"  align="center">
 				<template slot-scope="scope">
-				<span>{{ scope.row.tuikuan }}</span>
+					<template v-if="scope.row.edit">
+						<el-input type='number' v-model="scope.row.tuikuan" class="edit-input" size="small" />
+					</template>
+					<span v-else>{{ scope.row.tuikuan }}</span>
+				<!-- <span>{{ scope.row.tuikuan }}</span> -->
 				</template>
 			</el-table-column>
 			<el-table-column label="总支出"  align="center">
 				<template slot-scope="scope">
-				<span>{{(Number(scope.row.realshoumoney) - Number(scope.row.kakuan)-Number(scope.row.shuakaqi) - Number(scope.row.system) -Number(scope.row.youfei) -Number(scope.row.label)-Number(scope.row.shuie)-Number(scope.row.tuikuan)-Number(scope.row.jiekuan)).toFixed(2) }}</span>
+					<template v-if="scope.row.edit">
+						<span>{{ ( Number(scope.row.price1) * Number(scope.row.count) + Number(scope.row.banfei1) + Number(scope.row.jiaji1)+Number(scope.row.shuakaqi) + Number(scope.row.system) +Number(scope.row.youfei)+Number(scope.row.label)+Number(scope.row.shuie)+Number(scope.row.tuikuan)).toFixed(2) }}</span>
+					</template>
+					<span v-else>{{ scope.row.zhichu }}</span>
+					<!-- <span >{{(Number(scope.row.price1) * Number(scope.row.count) + Number(scope.row.banfei1) + Number(scope.row.jiaji1)).toFixed(2)}}</span> -->
 				</template>
 			</el-table-column>
 			<el-table-column label="纯利"  align="center">
 				<template slot-scope="scope">
-				<span>{{ scope.row.chunli }}</span>
+					<template v-if="scope.row.edit">
+						<span>{{ scope.row.realshoumoney -( Number(scope.row.price1) * Number(scope.row.count) + Number(scope.row.banfei1) + Number(scope.row.jiaji1)+Number(scope.row.shuakaqi) + Number(scope.row.system) +Number(scope.row.youfei)+Number(scope.row.label)+Number(scope.row.shuie)+Number(scope.row.tuikuan)).toFixed(2) }}</span>
+					</template>
+					<span v-else>{{ scope.row.chunli }}</span>
+				<!-- <span>{{ scope.row.chunli }}</span> -->
 				</template>
 			</el-table-column>
 			<el-table-column label="提点"  align="center">
 				<template slot-scope="scope">
-				<span>{{ scope.row.tidian }}</span>
+					<template v-if="scope.row.edit">
+						<el-input v-model="scope.row.tidian" class="edit-input" size="small" />
+					</template>
+					<span v-else>{{ scope.row.tidian }}</span>
+				<!-- <span>{{ scope.row.tidian }}</span> -->
 				</template>
 			</el-table-column>
 			<el-table-column label="设计"  align="center">
 				<template slot-scope="scope">
-				<span>{{ scope.row.sheji }}</span>
+					<template v-if="scope.row.edit">
+						<el-input v-model="scope.row.sheji" class="edit-input" size="small" />
+					</template>
+					<span v-else>{{ scope.row.sheji }}</span>
+				<!-- <span>{{ scope.row.sheji }}</span> -->
 				</template>
 			</el-table-column>
 			<el-table-column label="收货地址"  align="center" width="200" show-overflow-tooltip>
 				<template slot-scope="scope">
-				<span>{{ scope.row.dizhi }}</span>
+					<template v-if="scope.row.edit">
+						<el-input v-model="scope.row.dizhi" class="edit-input" size="small" />
+					</template>
+					<span v-else>{{ scope.row.dizhi }}</span>
+				<!-- <span>{{ scope.row.dizhi }}</span> -->
 				</template>
 			</el-table-column>
 			<el-table-column label="快递方式"  align="center">
 				<template slot-scope="scope">
-				<span>{{ scope.row.kuaidi }}</span>
+					<template v-if="scope.row.edit">
+						<el-select  v-model="scope.row.kuaidi" placeholder="快递方式" clearable filterable allow-create default-first-option>
+							<el-option  v-for="item in kuaidiList" :key="item.key" :label="item.key" :value="item.value" />
+						</el-select>
+						<!-- <el-input v-model="scope.row.kuaidi" class="edit-input" size="small" /> -->
+					</template>
+					<span v-else>{{ scope.row.kuaidi }}</span>
+				<!-- <span>{{ scope.row.kuaidi }}</span> -->
+				</template>
+			</el-table-column>
+			<el-table-column label="发货时间"  align="center">
+				<template slot-scope="scope">
+					<template v-if="scope.row.edit">
+						<el-date-picker
+								v-model="scope.row.fahuotime"
+								align="right"
+								type="datetime"
+								placeholder="选择日期"
+								value-format="yyyy-MM-dd hh:mm:ss"
+								>
+							</el-date-picker>
+						<!-- <el-input v-model="scope.row.fahuotime" class="edit-input" size="small" /> -->
+					</template>
+					<span v-else>{{ scope.row.fahuotime }}</span>
+				<!-- <span>{{ scope.row.kuaidi }}</span> -->
 				</template>
 			</el-table-column>
 			<el-table-column label="物流单号"  align="center">
 				<template slot-scope="scope">
-				<span>{{ scope.row.wuliucode }}</span>
+					<template v-if="scope.row.edit">
+						<el-input v-model="scope.row.wuliucode" class="edit-input" size="small" />
+					</template>
+					<span v-else>{{ scope.row.wuliucode }}</span>
 				</template>
 			</el-table-column>
 			<el-table-column label="备注"  align="center">
 				<template slot-scope="scope">
-				<span>{{ scope.row.beizhu }}</span>
+					<template v-if="scope.row.edit">
+						<el-input v-model="scope.row.beizhu" class="edit-input" size="small" />
+					</template>
+					<span v-else>{{ scope.row.beizhu }}</span>
 				</template>
 			</el-table-column>
 			<el-table-column label="备注1"  align="center">
 				<template slot-scope="scope">
-				<span>{{ scope.row.beizhu1 }}</span>
+					<template v-if="scope.row.edit">
+						<el-input v-model="scope.row.beizhu1" class="edit-input" size="small" />
+					</template>
+					<span v-else>{{ scope.row.beizhu1 }}</span>
+				<!-- <span>{{ scope.row.beizhu }}</span> -->
 				</template>
 			</el-table-column>
 			<el-table-column label="确认稿"  align="center" width="100">
 				<template slot-scope="scope">
+					<template  v-if="scope.row.edit">
+						<el-upload
+							class="upload-demo"
+							name='userimg'
+							:action="api+'/login/login/uploadUserImg'"
+							accept="image/*"
+							:show-file-list='false'
+							:on-success="handleAvatarSuccess"
+							:data='{id:scope.row.id}'
+							>
+							<el-button size="mini" type="primary" >修改</el-button>
+						</el-upload>
+					</template>
+					<template v-else>
+						<div v-if="scope.row.url ==null">
+							<el-upload
+								class="upload-demo"
+								name='userimg'
+								disabled
+								:action="api+'/login/login/uploadUserImg'"
+								accept="image/*"
+								:on-success="handleAvatarSuccess"
+								:data='{id:scope.row.id}'
+								>
+								<el-button v-if="scope.row.isduizhang =='0' " size="small" type="primary" >点击上传</el-button>
+								<el-button v-else disabled size="small" type="primary" >点击上传</el-button>
+							</el-upload>
+						</div>
+						<div v-else>
+							<div slot="reference" class="name-wrapper" @click="showModal(scope.row.url)">
+								<img :src="scope.row.url" alt="">
+							</div>
+						</div>
+					</template>
+				</template>
+				<!-- <template slot-scope="scope">
 					<div v-if="scope.row.url ==null">
 						<el-upload
 							class="upload-demo"
@@ -366,33 +643,35 @@
 						</el-upload>
 					</div>
 					<div v-else>
-						<!-- <el-popover trigger="hover" placement="top">
-							<div class="show-img">
-
-								<img :src="scope.row.url" alt="">
-							</div>
-							<div slot="reference" class="name-wrapper">
-								<img :src="scope.row.url" alt="">
-							</div>
-						</el-popover> -->
 						<div slot="reference" class="name-wrapper" @click="showModal(scope.row.url)">
 							<img :src="scope.row.url" alt="">
 						</div>
-						<!-- <el-popover trigger="hover" placement="top">
-							<img :src="scope.row.url" alt="">
-						</el-popover> -->
 					</div>
-				</template>
+				</!--> -->
 			</el-table-column>
-			<el-table-column label="操作" align="center" width="200"  class-name="small-padding fixed-width" fixed='right'>
-				<template slot-scope="{row}">
-                    <el-button size="mini" type="primary" @click="order(row)" >
+			<el-table-column label="操作" align="center" width="260"  class-name="small-padding fixed-width" >
+				<template slot-scope="scope">
+                    <el-button size="mini" type="primary" @click="order(scope.row)" >
                         下单
                     </el-button>
-                    <el-button size="mini" type="danger" @click="deleteCustomer(row)" v-if="power == 0">
+					<el-button size="mini" type="success" @click="scope.row.edit=!scope.row.edit" v-if="!scope.row.edit">
+						修改
+					</el-button>
+					<el-button size="mini"  @click="scope.row.edit=!scope.row.edit" v-else>
+						取消
+					</el-button>
+					<el-button
+						v-if="scope.row.edit"
+						type="success"
+						size="mini"
+						@click="confirmEdit(scope)"
+					>
+						保存
+					</el-button>
+                    <el-button size="mini" type="danger" @click="deleteCustomer(scope.row)" v-if="power == 0">
                         删除
                     </el-button>
-					<el-button size="mini" type="info" @click="disableCustomer(row)">
+					<el-button size="mini" type="info" @click="disableCustomer(scope.row)">
                         无效
                     </el-button>
 				</template>
@@ -498,19 +777,36 @@ export default {
 			{key:'线下客',value:'线下客'},
 		],
 		paymentList:[
-			{key:'北京恒泰迅捷',value:'北京恒泰迅捷'},
-			{key:'深圳市共荣达',value:'深圳市共荣达'},
-			{key:'卡世界微信',value:'卡世界微信'},
-			{key:'卡福微信',value:'卡福微信'},
-			{key:'客服微信',value:'客服微信'},
-			{key:'个人账号',value:'个人账号'},
-			{key:'工行',value:'工行'},
-			{key:'农行',value:'农行'},
-			{key:'建行',value:'建行'},
+				{key:'拍款自然的风',value:'拍款自然的风'},
+				{key:'拍款楚状元',value:'拍款楚状元'},
+				{key:'拍款卡世界(企业店)',value:'拍款卡世界(企业店)'},
+				{key:'对公:北京恒泰迅捷',value:'对公:北京恒泰迅捷'},
+				{key:'对公:深圳市共荣达',value:'对公:深圳市共荣达'},
+				{key:'线下汇支付宝',value:'线下汇支付宝'},
+				{key:'卡世界微信',value:'卡世界微信'},
+				{key:'客服微信',value:'客服微信'},
+				{key:'卡福微信',value:'卡福微信'},
+				{key:'个人账户工行',value:'个人账户工行'},
+				{key:'个人账户农行',value:'个人账户农行'},
+				{key:'个人账户建行',value:'个人账户建行'},
+			],
+		kuaidiList:[
+			{key:'德邦快递',value:'德邦快递'},
+			{key:'顺丰快递',value:'顺丰快递'},
+			{key:'优速快递',value:'优速快递'},
+			{key:'申通快递',value:'申通快递'},
+			{key:'中通快递',value:'中通快递'},
+			{key:'圆通快递',value:'圆通快递'},
+			{key:'韵达快递',value:'韵达快递'},
+			{key:'邮政EMS',value:'邮政EMS'},
+			{key:'百世快递',value:'百世快递'},
+			{key:'德邦物流',value:'德邦物流'},
+			// {key:'手动输入',value:'byinput'},
 		],
 		chejianList:[
 			{key:'卡蛙',value:'卡蛙-广州市',add:' 广州市'},
 			{key:'万联',value:'卡蛙-东莞市',add:' 东莞市'},
+			{key:'俊酷',value:'俊酷-北京市',add:' 北京市'},
 			{key:'建和',value:'建和-深圳市',add:' 深圳市'},
 			{key:'博天瑞',value:'博天瑞-深圳市',add:' 深圳市'},
 			{key:'弘辉',value:'弘辉-深圳市',add:' 深圳市'},
@@ -572,6 +868,43 @@ export default {
 	this.getUsers()
   },
   methods: {
+	confirmEdit(scope) {
+		scope.row.shoumoney = (Number(scope.row.price)*Number(scope.row.count)+Number(scope.row.jiaji)+Number(scope.row.banfei)).toFixed(2);
+		scope.row.kakuan = (Number(scope.row.price1) * Number(scope.row.count) + Number(scope.row.banfei1) + Number(scope.row.jiaji1)).toFixed(2);
+		scope.row.shengmoney = Number(scope.row.realshoumoney) - Number(scope.row.dingmoney) ;
+		scope.row.zhichu = ( Number(scope.row.price1) * Number(scope.row.count) + Number(scope.row.banfei1) + Number(scope.row.jiaji1)+Number(scope.row.shuakaqi) + Number(scope.row.system) +Number(scope.row.youfei)+Number(scope.row.label)+Number(scope.row.shuie)+Number(scope.row.tuikuan)).toFixed(2);
+		scope.row.lirun = Number(scope.row.realshoumoney) -(Number(scope.row.price1) * Number(scope.row.count) + Number(scope.row.banfei1) + Number(scope.row.jiaji1)).toFixed(2);
+		scope.row.chunli = Number(scope.row.realshoumoney) -( Number(scope.row.price1) * Number(scope.row.count) + Number(scope.row.banfei1) + Number(scope.row.jiaji1)+Number(scope.row.shuakaqi) + Number(scope.row.system) +Number(scope.row.youfei)+Number(scope.row.label)+Number(scope.row.shuie)+Number(scope.row.tuikuan)).toFixed(2);
+		scope.row.uid = getToken()
+		console.log(scope.row)
+		this.$http({
+			url: '/login/login/updatecustomer',
+			method: 'post',
+			data:scope.row
+		}).then((res) => {
+			if (res.code == 1) {
+				this.$notify({
+					title: '成功',
+					message: '更新成功',
+					type: 'success'
+				});
+			}else{
+				this.$notify({
+					title: '失败',
+					message: `更新失败:${res.msg}`,
+					type: 'error'
+				});
+			}
+		}).catch(()=>{
+			this.$notify({
+				title: '失败',
+				message: '更新失败',
+				type: 'error'
+			});
+		})
+		// updatecustomer
+		scope.row.edit = false
+	},
 	handleSelectionChange(v){
 		this.selectList = v;
 		console.log(v)

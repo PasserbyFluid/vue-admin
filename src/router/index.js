@@ -32,18 +32,6 @@
 		]
 	},
 	{
-		path: '/image',
-		component: Layout,
-		redirect: '/image',
-		roles:'0',
-		children: [{
-			path: 'image',
-			name: 'image',
-			component: () => import('@/views/image/index'),
-			meta: { title: '管理设置', icon: 'dashboard' }
-		}]
-	},
-	{
 		path: '/customer',
 		component: Layout,
 		redirect: '/customer/list',
@@ -93,6 +81,18 @@
 				meta: { title: '增加支出', icon: 'table' }
 			},
 		]
+	},
+	{
+		path: '/image',
+		component: Layout,
+		redirect: '/image',
+		roles:'0',
+		children: [{
+			path: 'image',
+			name: 'image',
+			component: () => import('@/views/image/index'),
+			meta: { title: '管理设置', icon: 'dashboard' }
+		}]
 	},
 
 	{ path: '*', redirect: '/404', hidden: true }

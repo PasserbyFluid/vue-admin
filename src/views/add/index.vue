@@ -1,7 +1,7 @@
 <template>
 	<div class="app-container" id="customer-add">
 		<el-card class="box-card">
-			<el-form ref="form" :model="form" label-width="120px" :inline="true">
+			<el-form ref="addform" :model="form"  :rules="rules" label-width="120px" :inline="true">
 				<el-row :gutter="20">
 					<el-col :span="6">
 						<el-form-item label="订单编号">
@@ -9,7 +9,7 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="定稿日期">
+						<el-form-item label="定稿日期" prop='dingdate'>
 							<el-date-picker
 								v-model="form.dingdate"
 								align="right"
@@ -22,25 +22,25 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="客户来源">
-							<el-select v-model="form.source" placeholder="选择客户来源">
+						<el-form-item label="客户来源"  prop='source'>
+							<el-select v-model="form.source" placeholder="选择客户来源" clearable filterable allow-create default-first-option>
 								<el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.key" :value="item.value" />
 							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="聊天旺旺">
+						<el-form-item label="聊天旺旺"  prop='aliwwliao'>
 						<el-input v-model="form.aliwwliao"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="付款旺旺">
+						<el-form-item label="付款旺旺"  prop='aliwwfu'>
 						<el-input v-model="form.aliwwfu"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="客户类型">
-							<el-select v-model="form.kehu" placeholder="选择客户类型">
+						<el-form-item label="客户类型" prop='kehu'>
+							<el-select v-model="form.kehu" placeholder="选择客户类型" clearable filterable allow-create default-first-option>
 								<el-option label="店面" value="店面"/>
 								<el-option label="公司" value="公司"/>
 								<el-option label="印刷广告" value="印刷广告"/>
@@ -51,23 +51,23 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="卡名">
+						<el-form-item label="卡名" prop='card'>
 						<el-input v-model="form.card"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="工艺">
+						<el-form-item label="工艺" prop='gy'>
 						<el-input v-model="form.gy"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="数量">
-						<el-input v-model="form.count"/>
+						<el-form-item label="数量" prop='count'>
+						<el-input type='number' v-model="form.count"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="收单价">
-						<el-input v-model="form.price"/>
+						<el-form-item label="收单价" prop='price'>
+						<el-input  type='number' v-model="form.price"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
@@ -82,26 +82,26 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="收金额">
-							<el-input style="width:150px;" v-model="form.shoumoney" :value="shoumoneyFun" disabled />
+							<el-input type='number' style="width:150px;" v-model="form.shoumoney" :value="shoumoneyFun" disabled />
 							<el-checkbox v-model="isShowBeizhu">备注</el-checkbox>
                 			<el-input type="textarea" :rows="2" v-if="isShowBeizhu" style="width:200px;" v-model="form.shoubeizhu" placeholder="请输入内容"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="实际到账金额">
-						<el-input v-model="form.realshoumoney"/>
+						<el-form-item label="实际到账金额" prop='realshoumoney'>
+						<el-input type='number' v-model="form.realshoumoney"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="付款方式">
-							<el-select v-model="form.payment" placeholder="付款方式">
+						<el-form-item label="付款方式" prop='payment'>
+							<el-select v-model="form.payment" placeholder="付款方式" clearable filterable allow-create default-first-option>
 								<el-option v-for="item in paymentList" :key="item.key" :label="item.key" :value="item.value" />
 							</el-select>
 						<!-- <el-input v-model="form.payment"/> -->
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="拍款时间">
+						<el-form-item label="拍款时间" prop='paytime'>
 							<el-date-picker
 								v-model="form.paytime"
 								align="right"
@@ -114,12 +114,12 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="定金">
-						<el-input v-model="form.dingmoney"/>
+						<el-input type='number' v-model="form.dingmoney"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="定金付款方式">
-							<el-select v-model="form.paymentding" placeholder="定金付款方式">
+							<el-select v-model="form.paymentding" placeholder="定金付款方式" clearable filterable allow-create default-first-option>
 								<el-option v-for="item in paymentList" :key="item.key" :label="item.key" :value="item.value" />
 							</el-select>
 						<!-- <el-input v-model="form.payment"/> -->
@@ -145,12 +145,12 @@
 					<el-col :span="6" >
 						<el-form-item label="余款付款方式">
 							<template v-if="form.shengmoney > 0">
-								<el-select  v-model="form.paymentyu" placeholder="余款付款方式">
+								<el-select  v-model="form.paymentyu" placeholder="余款付款方式" clearable filterable allow-create default-first-option>
 									<el-option  v-for="item in paymentList" :key="item.key" :label="item.key" :value="item.value" />
 								</el-select>
 							</template>
 							<template v-else>
-								<el-select disabled v-model="form.paymentyu" placeholder="余款付款方式">
+								<el-select disabled v-model="form.paymentyu" placeholder="余款付款方式" clearable filterable allow-create default-first-option>
 									<el-option  v-for="item in paymentList" :key="item.key" :label="item.key" :value="item.value" />
 								</el-select>
 							</template>
@@ -191,8 +191,8 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="车间">
-							<el-select v-model="form.chejian" placeholder="选择车间">
+						<el-form-item label="车间" prop='chejian'>
+							<el-select v-model="form.chejian" placeholder="选择车间" clearable filterable allow-create default-first-option>
 								<el-option v-for="item in chejianList" :key="item.key" :label="item.key" :value="item.value" >
 									<span style="float: left">{{ item.key }}</span>
       								<span style="float: right; color: #8492a6; font-size: 13px">{{ item.add }}</span>
@@ -202,18 +202,18 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="出单价">
-						<el-input v-model="form.price1"/>
+						<el-form-item label="出单价" prop='price1'>
+						<el-input type='number' v-model="form.price1"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="出版费">
-						<el-input v-model="form.banfei1"/>
+						<el-input type='number' v-model="form.banfei1"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="出加急费">
-						<el-input v-model="form.jiaji1"/>
+						<el-input type='number' v-model="form.jiaji1"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
@@ -233,30 +233,31 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="刷卡器">
-						<el-input v-model="form.shuakaqi"/>
+						<el-input type='number' v-model="form.shuakaqi"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="系统">
-						<el-input v-model="form.system"/>
+						<el-input type='number' v-model="form.system"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="邮费">
-						<el-input v-model="form.youfei"/>
+						<el-input type='number' v-model="form.youfei"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="金属标签">
-						<el-input v-model="form.label"/>
+						<el-input type='number' v-model="form.label"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="发票类型">
-							<el-select v-model="form.fapiao" placeholder="发票税点 ">
+							<el-select v-model="form.fapiao" placeholder="发票税点 " clearable filterable allow-create default-first-option>
 								<el-option label="普通发票6%" value="普通发票6%"/>
 								<el-option label="专用发票6%" value="专用发票6%"/>
 								<el-option label="专用发票13%" value="专用发票13%"/>
+								<el-option label="无%" value="0"/>
 							</el-select>
 						</el-form-item>
 					</el-col>
@@ -267,7 +268,7 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="退款">
-						<el-input v-model="form.tuikuan"/>
+						<el-input type='number' v-model="form.tuikuan"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
@@ -286,7 +287,7 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="设计">
+						<el-form-item label="设计" prop='sheji'>
 						<el-input v-model="form.sheji"/>
 						</el-form-item>
 					</el-col>
@@ -296,8 +297,11 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="快递方式">
-						<el-input v-model="form.kuaidi"/>
+						<el-form-item label="快递方式" >
+							<el-select  v-model="form.kuaidi" placeholder="快递方式" clearable filterable allow-create default-first-option>
+								<el-option  v-for="item in kuaidiList" :key="item.key" :label="item.key" :value="item.value" />
+							</el-select>
+							<!-- <el-input v-if="form.kuaidi =='byinput'"  v-model="form.kuaidi"/> -->
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
@@ -332,7 +336,7 @@
 					<el-col :span="6" style="text-align:center;">
 						<el-form-item>
 						<div class="btn-box">
-							<el-button type="primary" @click="onSubmit">确认</el-button>
+							<el-button type="primary" @click="onSubmit('addform')">确认</el-button>
 							<el-button @click="onCancel">取消</el-button>
 						</div>
 						</el-form-item>
@@ -401,6 +405,23 @@
 				beizhu1:'',
 				uid:getToken()
 			},
+			rules: {
+				dingdate:[{ required: true, message: '请输入定稿日期', trigger: 'blur' }],
+				source:[{ required: true, message: '请输入客户来源', trigger: 'blur' }],
+				aliwwliao:[{ required: true, message: '请输入聊天旺旺', trigger: 'blur' }],
+				aliwwfu:[{ required: true, message: '请输入付款旺旺', trigger: 'blur' }],
+				card:[{ required: true, message: '请输入卡名', trigger: 'blur' }],
+				gy:[{ required: true, message: '请输入工艺', trigger: 'blur' }],
+				count:[{ required: true, message: '请输入数量', trigger: 'blur' }],
+				price:[{ required: true, message: '请输入收单价', trigger: 'blur' }],
+				realshoumoney:[{ required: true, message: '请输入实际到账金额', trigger: 'blur' }],
+				payment:[{ required: true, message: '请输入付款方式', trigger: 'blur' }],
+				paytime:[{ required: true, message: '请输入拍款时间', trigger: 'blur' }],
+				chejian:[{ required: true, message: '请输入车间', trigger: 'blur' }],
+				price1:[{ required: true, message: '请输入出单价', trigger: 'blur' }],
+				sheji:[{ required: true, message: '请输入设计', trigger: 'blur' }],
+				kehu:[{ required: true, message: '请输入客户类型', trigger: 'blur' }],
+			},
 			pickerOptions: {
 				disabledDate(time) {
 					return time.getTime() > Date.now();
@@ -432,20 +453,37 @@
 				{key:'卡世界',value:'卡世界'},
 				{key:'线下客',value:'线下客'},
 			],
+			kuaidiList:[
+				{key:'德邦快递',value:'德邦快递'},
+				{key:'顺丰快递',value:'顺丰快递'},
+				{key:'优速快递',value:'优速快递'},
+				{key:'申通快递',value:'申通快递'},
+				{key:'中通快递',value:'中通快递'},
+				{key:'圆通快递',value:'圆通快递'},
+				{key:'韵达快递',value:'韵达快递'},
+				{key:'邮政EMS',value:'邮政EMS'},
+				{key:'百世快递',value:'百世快递'},
+				{key:'德邦物流',value:'德邦物流'},
+				// {key:'手动输入',value:'byinput'},
+			],
 			paymentList:[
-				{key:'北京恒泰迅捷',value:'北京恒泰迅捷'},
-				{key:'深圳市共荣达',value:'深圳市共荣达'},
+				{key:'拍款自然的风',value:'拍款自然的风'},
+				{key:'拍款楚状元',value:'拍款楚状元'},
+				{key:'拍款卡世界(企业店)',value:'拍款卡世界(企业店)'},
+				{key:'对公:北京恒泰迅捷',value:'对公:北京恒泰迅捷'},
+				{key:'对公:深圳市共荣达',value:'对公:深圳市共荣达'},
+				{key:'线下汇支付宝',value:'线下汇支付宝'},
 				{key:'卡世界微信',value:'卡世界微信'},
-				{key:'卡福微信',value:'卡福微信'},
 				{key:'客服微信',value:'客服微信'},
-				{key:'个人账号',value:'个人账号'},
-				{key:'工行',value:'工行'},
-				{key:'农行',value:'农行'},
-				{key:'建行',value:'建行'},
+				{key:'卡福微信',value:'卡福微信'},
+				{key:'个人账户工行',value:'个人账户工行'},
+				{key:'个人账户农行',value:'个人账户农行'},
+				{key:'个人账户建行',value:'个人账户建行'},
 			],
 			chejianList:[
 				{key:'卡蛙',value:'卡蛙-广州市',add:' 广州市'},
 				{key:'万联',value:'卡蛙-东莞市',add:' 东莞市'},
+				{key:'俊酷',value:'俊酷-北京市',add:' 北京市'},
 				{key:'建和',value:'建和-深圳市',add:' 深圳市'},
 				{key:'博天瑞',value:'博天瑞-深圳市',add:' 深圳市'},
 				{key:'弘辉',value:'弘辉-深圳市',add:' 深圳市'},
@@ -477,6 +515,8 @@
 				rate = 0.06;
 			}else if(this.form.fapiao == '专用发票13%'){
 				rate = 0.10;
+			}else{
+				rate = 0;
 			}
 			return this.form.shuie = (Number(this.form.realshoumoney) * Number(rate)).toFixed(2);
 		},
@@ -503,22 +543,26 @@
 		},
 	},
 	methods: {
-		onSubmit() {
-			this.$http({
-				url: '/login/login/addcustomer',
-				method: 'post',
-				data:this.form
-			}).then((res) => {
-				if (res.code == 1) {
-					this.$notify({
-						title: '成功',
-						message: '添加成功',
-						type: 'success'
-					});
-					this.form.ordercode = new Date().format("yyyyMMddhhmmssS")
-					// this.$message.success('添加成功')
+		onSubmit(formName) {
+			this.$refs[formName].validate((valid) => {
+		  		if (valid) {
+					this.$http({
+						url: '/login/login/addcustomer',
+						method: 'post',
+						data:this.form
+					}).then((res) => {
+						if (res.code == 1) {
+							this.$notify({
+								title: '成功',
+								message: '添加成功',
+								type: 'success'
+							});
+							this.form.ordercode = new Date().format("yyyyMMddhhmmssS")
+							// this.$message.success('添加成功')
+						}
+						console.log(res)
+					})
 				}
-				console.log(res)
 			})
 		},
 		onCancel() {
