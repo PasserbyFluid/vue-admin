@@ -44,12 +44,12 @@
 				<el-input v-model="listQuery.realshoumoney" placeholder="实际到账金额" style="width: 100px;" class="filter-item" />
 				<el-input v-model="listQuery.dingmoney" placeholder="定金" style="width: 100px;" class="filter-item" />
 				<el-input v-model="listQuery.shengmoney" placeholder="余款" style="width: 100px;" class="filter-item" />
-				<!-- <el-input v-model="listQuery.payment" placeholder="付款方式" style="width: 100px;" class="filter-item" /> -->
-				<el-select v-model="listQuery.payment" placeholder="付款方式">
+				<!-- <el-input v-model="listQuery.payment" placeholder="全款付款方式" style="width: 100px;" class="filter-item" /> -->
+				<el-select v-model="listQuery.payment" placeholder="全款付款方式">
 					<el-option v-for="item in paymentList" :key="item.key" :label="item.key" :value="item.value" />
 				</el-select>
-				<el-input v-model="listQuery.paytime" placeholder="付款时间" style="width: 100px;" class="filter-item" />
-				<el-input v-model="listQuery.huoqi" placeholder="付款时间" style="width: 100px;" class="filter-item" />
+				<el-input v-model="listQuery.paytime" placeholder="全款付款时间" style="width: 100px;" class="filter-item" />
+				<!-- <el-input v-model="listQuery.huoqi" placeholder="全款付款时间" style="width: 100px;" class="filter-item" /> -->
 				<!-- <el-input v-model="listQuery.chejian" placeholder="车间" style="width: 100px;" class="filter-item" /> -->
 				<el-select v-model="listQuery.chejian" placeholder="车间">
 					<el-option v-for="item in chejianList" :key="item.key" :label="item.key" :value="item.value" >
@@ -274,21 +274,21 @@
 					<template v-if="scope.row.edit&&power=='0'">
 						<el-input type='number' v-model="scope.row.realshoumoney" class="edit-input" size="small" />
 					</template>
-					<span v-else>{{ scope.row.shoumoney }}</span>
+					<span v-else>{{ scope.row.realshoumoney }}</span>
 				<!-- <span>{{ scope.row.shoumoney }}</span> -->
 				</template>
 			</el-table-column>
-			<el-table-column label="付款方式"  align="center">
+			<el-table-column label="全款付款方式"  align="center">
 				<template slot-scope="scope">
 					<template v-if="scope.row.edit&&power=='0'">
-						<el-select v-model="scope.row.payment" placeholder="付款方式">
+						<el-select v-model="scope.row.payment" placeholder="全款付款方式">
 							<el-option v-for="item in paymentList" :key="item.key" :label="item.key" :value="item.value" />
 						</el-select>
 					</template>
 					<span v-else>{{ scope.row.payment }}</span>
 				</template>
 			</el-table-column>
-			<el-table-column label="付款时间"  align="center">
+			<el-table-column label="全款付款时间"  align="center">
 				<template slot-scope="scope">
 					<template v-if="scope.row.edit&&power=='0'">
 						<el-date-picker
@@ -724,7 +724,7 @@
 				@size-change="handleSizeChange"
 				@current-change="pageChange"
 				:current-page='listQuery.page'
-				:page-sizes="[10, 20, 30, 40,100]"
+				:page-sizes="[10, 50, 100, 500,1000]"
 				:page-size="listQuery.limit"
 				layout="total, sizes, prev, pager, next, jumper"
 				:total="total">
@@ -840,7 +840,7 @@ export default {
 		],
 		chejianList:[
 			{key:'卡蛙',value:'卡蛙-广州市',add:' 广州市'},
-			{key:'万联',value:'卡蛙-东莞市',add:' 东莞市'},
+			{key:'万联',value:'万联-东莞市',add:' 东莞市'},
 			{key:'俊酷',value:'俊酷-北京市',add:' 北京市'},
 			{key:'建和',value:'建和-深圳市',add:' 深圳市'},
 			{key:'博天瑞',value:'博天瑞-深圳市',add:' 深圳市'},
@@ -1124,7 +1124,7 @@ export default {
 		handleDownload() {
 		this.downloadLoading = true
 		import('@/utils/Export2Excel').then(excel => {
-			const tHeader = ['订单编号','定稿日期', '客户归属','客户来源', '聊天旺旺','付款旺旺', '客户类型', '卡名', '工艺','数量', '收单价', '收版费', '收加急费', '收金额','实际到账金额', '付款方式', '拍款日期','定金','定金付款方式','定金付款时间', '余款','余款付款方式','余款付款时间','货期', '车间','出单价', '出版费', '出加急费', '卡款出', '供应商结款','利润','刷卡器', '系统', '邮费', '金属标签', '发票','税额', '退款',  '总支出', '纯利', '提点', '设计', '收货地址', '快递方式', '发货时间', '物流单号', '备注', '备注1']
+			const tHeader = ['订单编号','定稿日期', '客户归属','客户来源', '聊天旺旺','付款旺旺', '客户类型', '卡名', '工艺','数量', '收单价', '收版费', '收加急费', '收金额','实际到账金额', '全款付款方式', '拍款日期','定金','定金付款方式','定金付款时间', '余款','余款付款方式','余款付款时间','货期', '车间','出单价', '出版费', '出加急费', '卡款出', '供应商结款','利润','刷卡器', '系统', '邮费', '金属标签', '发票','税额', '退款',  '总支出', '纯利', '提点', '设计', '收货地址', '快递方式', '发货时间', '物流单号', '备注', '备注1']
 			const filterVal = ['ordercode','dingdate','belong', 'source',  'aliwwliao','aliwwfu','kehu','card', 'gy','count','price', 'banfei', 'jiaji', 'shoumoney','realshoumoney','payment', 'paytime', 'dingmoney','paymentding','paytimeding','shengmoney','paymentyu','paytimeyu','huoqi', 'chejian', 'price1', 'banfei1','jiaji1','kakuan','jiekuan', 'lirun', 'shuakaqi', 'system', 'youfei','label','fapiao','shuie', 'tuikuan', 'zhichu', 'chunli', 'tidian', 'sheji', 'dizhi', 'kuaidi', 'fahuotime','wuliucode','beizhu','beizhu1']
 			const list = this.list
 			const data = this.formatJson(filterVal, list)
@@ -1140,7 +1140,7 @@ export default {
 		},
 		handleDownloadSelect(){
 			import('@/utils/Export2Excel').then(excel => {
-			const tHeader = ['订单编号','定稿日期', '客户归属','客户来源', '聊天旺旺','付款旺旺', '客户类型', '卡名', '工艺','数量', '收单价', '收版费', '收加急费', '收金额','实际到账金额', '付款方式', '拍款日期','定金','定金付款方式','定金付款时间', '余款','余款付款方式','余款付款时间','货期', '车间','出单价', '出版费', '出加急费', '卡款出', '供应商结款','利润','刷卡器', '系统', '邮费', '金属标签', '发票','税额', '退款',  '总支出', '纯利', '提点', '设计', '收货地址', '快递方式', '发货时间', '物流单号', '备注', '备注1']
+			const tHeader = ['订单编号','定稿日期', '客户归属','客户来源', '聊天旺旺','付款旺旺', '客户类型', '卡名', '工艺','数量', '收单价', '收版费', '收加急费', '收金额','实际到账金额', '全款付款方式', '拍款日期','定金','定金付款方式','定金付款时间', '余款','余款付款方式','余款付款时间','货期', '车间','出单价', '出版费', '出加急费', '卡款出', '供应商结款','利润','刷卡器', '系统', '邮费', '金属标签', '发票','税额', '退款',  '总支出', '纯利', '提点', '设计', '收货地址', '快递方式', '发货时间', '物流单号', '备注', '备注1']
 			const filterVal = ['ordercode','dingdate','belong', 'source',  'aliwwliao','aliwwfu','kehu','card', 'gy','count','price', 'banfei', 'jiaji', 'shoumoney','realshoumoney','payment', 'paytime', 'dingmoney','paymentding','paytimeding','shengmoney','paymentyu','paytimeyu','huoqi', 'chejian', 'price1', 'banfei1','jiaji1','kakuan','jiekuan', 'lirun', 'shuakaqi', 'system', 'youfei','label','fapiao','shuie', 'tuikuan', 'zhichu', 'chunli', 'tidian', 'sheji', 'dizhi', 'kuaidi', 'fahuotime','wuliucode','beizhu','beizhu1']
 			const list = this.selectList
 			const data = this.formatJson(filterVal, list)
