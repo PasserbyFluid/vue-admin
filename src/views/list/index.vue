@@ -995,7 +995,7 @@ export default {
 		confirmEdit(scope) {
 			scope.row.shoumoney = (Number(scope.row.price)*Number(scope.row.count)+Number(scope.row.jiaji)+Number(scope.row.banfei)).toFixed(2);
 			scope.row.kakuan = (Number(scope.row.price1) * Number(scope.row.count) + Number(scope.row.banfei1) + Number(scope.row.jiaji1)).toFixed(2);
-			scope.row.shengmoney = Number(scope.row.realshoumoney) - Number(scope.row.dingmoney) ;
+			// scope.row.shengmoney = Number(scope.row.realshoumoney) - Number(scope.row.dingmoney) ;
 			scope.row.zhichu = ( Number(scope.row.price1) * Number(scope.row.count) + Number(scope.row.banfei1) + Number(scope.row.jiaji1)+Number(scope.row.shuakaqi) + Number(scope.row.system) +Number(scope.row.youfei)+Number(scope.row.label)+Number(scope.row.shuie)+Number(scope.row.tuikuan)).toFixed(2);
 			scope.row.lirun = Number(scope.row.realshoumoney) -(Number(scope.row.price1) * Number(scope.row.count) + Number(scope.row.banfei1) + Number(scope.row.jiaji1)).toFixed(2);
 			scope.row.chunli = Number(scope.row.realshoumoney) -( Number(scope.row.price1) * Number(scope.row.count) + Number(scope.row.banfei1) + Number(scope.row.jiaji1)+Number(scope.row.shuakaqi) + Number(scope.row.system) +Number(scope.row.youfei)+Number(scope.row.label)+Number(scope.row.shuie)+Number(scope.row.tuikuan)).toFixed(2);
