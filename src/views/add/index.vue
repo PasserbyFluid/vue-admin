@@ -88,20 +88,20 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="实际到账金额" prop='realshoumoney'>
+						<el-form-item label="实际到账金额" >
 						<el-input type='number' v-model="form.realshoumoney"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="付款方式" prop='payment'>
-							<el-select v-model="form.payment" placeholder="付款方式" clearable filterable allow-create default-first-option>
+						<el-form-item label="全款付款方式" prop='payment'>
+							<el-select v-model="form.payment" placeholder="全款付款方式" clearable filterable allow-create default-first-option>
 								<el-option v-for="item in paymentList" :key="item.key" :label="item.key" :value="item.value" />
 							</el-select>
 						<!-- <el-input v-model="form.payment"/> -->
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="拍款时间" prop='paytime'>
+						<el-form-item label="全款付款时间" prop='paytime'>
 							<el-date-picker
 								v-model="form.paytime"
 								align="right"
@@ -258,7 +258,7 @@
 								<el-option label="普通发票6%" value="普通发票6%"/>
 								<el-option label="专用发票6%" value="专用发票6%"/>
 								<el-option label="专用发票13%" value="专用发票13%"/>
-								<el-option label="无%" value="0"/>
+								<el-option label="无发票" value="0"/>
 							</el-select>
 						</el-form-item>
 					</el-col>

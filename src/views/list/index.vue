@@ -495,6 +495,7 @@
 							<el-option label="普通发票6%" value="普通发票6%"/>
 							<el-option label="专用发票6%" value="专用发票6%"/>
 							<el-option label="专用发票13%" value="专用发票13%"/>
+							<el-option label="无发票" value="0"/>
 						</el-select>
 						<!-- <el-input v-model="scope.row.fapiao" class="edit-input" size="small" /> -->
 					</template>
@@ -504,7 +505,7 @@
 			</el-table-column>
 			<el-table-column label="税额"  align="center">
 				<template slot-scope="scope">
-				<span>{{ scope.row.shuie }}</span>
+				<span>{{ (scope.row.fapiao).indexOf('6') > -1 ? scope.row.realshoumoney * 0.06 : (scope.row.fapiao).indexOf('13') > -1 ? scope.row.realshoumoney * 0.13 :0}}</span>
 				</template>
 			</el-table-column>
 			<el-table-column label="退款"  align="center">
@@ -999,7 +1000,7 @@ export default {
 			scope.row.lirun = Number(scope.row.realshoumoney) -(Number(scope.row.price1) * Number(scope.row.count) + Number(scope.row.banfei1) + Number(scope.row.jiaji1)).toFixed(2);
 			scope.row.chunli = Number(scope.row.realshoumoney) -( Number(scope.row.price1) * Number(scope.row.count) + Number(scope.row.banfei1) + Number(scope.row.jiaji1)+Number(scope.row.shuakaqi) + Number(scope.row.system) +Number(scope.row.youfei)+Number(scope.row.label)+Number(scope.row.shuie)+Number(scope.row.tuikuan)).toFixed(2);
 			scope.row.uid = getToken()
-
+			scope.row.shuie = (scope.row.fapiao).indexOf('6') > -1 ? scope.row.realshoumoney * 0.06 : (scope.row.fapiao).indexOf('13') > -1 ? scope.row.realshoumoney * 0.13 :0;
 			this.$http({
 				url: '/login/login/updatecustomer',
 				method: 'post',
