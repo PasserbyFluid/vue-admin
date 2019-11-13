@@ -9,8 +9,7 @@
 > 2.订单管理
 > 3.用户管理
 > 4.管理员设置
-## 线上Demo
-[点我](https://app.itolddriver.com)
+
 ## Build Setup
 
 ``` bash
